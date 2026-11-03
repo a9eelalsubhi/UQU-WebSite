@@ -28,16 +28,16 @@ const PulseScene=(()=>{
    const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);
    w=r.width;h=r.height;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  function frame(now){
+  function frame(now,fill=false){
    const t=(now-t0)/1000,phase=(t%BEAT)/BEAT,style=css();
    const ink=style.getPropertyValue('--scene-ink').trim()||'#0a6b66',hot=style.getPropertyValue('--scene-hot').trim()||'#c79a3c',line=style.getPropertyValue('--scene-line').trim()||'#0a6b66';
    ctx.clearRect(0,0,w,h);
    tiltX+=(targetX-tiltX)*.06;tiltY+=(targetY-tiltY)*.06;
-   const traceH=compact?0:Math.min(90,h*.16),cx=w/2,cy=(h-traceH)/2,scale=Math.min(w,h-traceH)*.36;
+   const traceOnly=h<120,traceH=traceOnly?h:compact?Math.min(44,h*.18):Math.min(90,h*.16),cx=w/2,cy=(h-traceH)/2,scale=Math.min(w,h-traceH)*.36;
    const beat=1+.045*Math.exp(-((phase-.4)**2)/.002)+.02*Math.exp(-((phase-.62)**2)/.006);
    const ry=Math.sin(t*.45)*.75+tiltX*.5,rx=-.18+tiltY*.35,cyR=Math.cos(ry),syR=Math.sin(ry),cxR=Math.cos(rx),sxR=Math.sin(rx);
    const scanY=Math.sin(t*.7)*.95;
-   for(const p of pts){
+   if(!traceOnly)for(const p of pts){
     let x=p.x*beat,y=p.y*beat,z=p.z*beat;
     const x1=x*cyR+z*syR,z1=-x*syR+z*cyR,y1=y*cxR-z1*sxR,z2=y*sxR+z1*cxR;
     const persp=2.6/(2.6+z2),sx=cx+x1*scale*persp,sy=cy+y1*scale*persp;
@@ -49,11 +49,12 @@ const PulseScene=(()=>{
    }
    // scan plane ellipse
    const ey=cy+scanY*scale*.95*cxR;
-   ctx.globalAlpha=.35;ctx.strokeStyle=hot;ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,ey,scale*1.05,scale*.16,0,0,Math.PI*2);ctx.stroke();
-   if(!compact){
+   ctx.globalAlpha=traceOnly?0:.35;ctx.strokeStyle=hot;ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,ey,scale*1.05,scale*.16,0,0,Math.PI*2);ctx.stroke();
+   {
     const base=h-traceH/2,amp=traceH*.42,speed=w/2.4;
     const headX=(t*speed)%(w+40)-20;
-    trace.push({x:headX,y:base-ecg(phase)*amp});
+    if(fill){trace.length=0;for(let x=0;x<=headX;x+=2)trace.push({x,y:base-ecg(((t-(headX-x)/speed)%BEAT+BEAT)%BEAT/BEAT)*amp});}
+    else trace.push({x:headX,y:base-ecg(phase)*amp});
     while(trace.length&&(trace.length>400||trace[0].x>headX))trace.shift();
     ctx.globalAlpha=.16;ctx.strokeStyle=line;ctx.beginPath();ctx.moveTo(0,base);ctx.lineTo(w,base);ctx.stroke();
     ctx.lineWidth=2;ctx.lineJoin='round';
@@ -70,8 +71,8 @@ const PulseScene=(()=>{
   function loop(now){frame(now);if(running)raf=requestAnimationFrame(loop);}
   function start(){if(running||reduce.matches||!visible||document.hidden)return;running=true;raf=requestAnimationFrame(loop);}
   function stop(){running=false;cancelAnimationFrame(raf);}
-  function still(){size();frame(t0+BEAT*400);}
-  const ro=new ResizeObserver(()=>{size();if(!running)frame(performance.now());});ro.observe(canvas);
+  function still(){size();frame(t0+BEAT*1000*2.3,true);}
+  const ro=new ResizeObserver(()=>{size();if(!running)reduce.matches?still():frame(performance.now());});ro.observe(canvas);
   const io=new IntersectionObserver(([en])=>{visible=en.isIntersecting;visible?start():stop();});io.observe(canvas);
   const onVis=()=>document.hidden?stop():start();document.addEventListener('visibilitychange',onVis);
   const onMove=e=>{const r=canvas.getBoundingClientRect();targetX=((e.clientX-r.left)/r.width-.5)*2;targetY=((e.clientY-r.top)/r.height-.5)*2;};

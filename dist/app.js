@@ -39,11 +39,11 @@ const statusNames = {new:'جديد',progress:'قيد المعالجة',waiting:'
 const years = ['السنة الأولى','السنة الثانية','السنة الثالثة','السنة الرابعة','السنة الخامسة','السنة السادسة'];
 const services = [
  {id:'certificate',name:'استلام وثيقة التخرج',unit:'الشؤون الأكاديمية',time:'٣ أيام عمل',icon:'graduation'},
- {id:'academic',name:'طلب أكاديمي',unit:'الشؤون الأكاديمية',time:'يومان عمل',icon:'book'},
+ {id:'academic',name:'طلب أكاديمي',unit:'الشؤون الأكاديمية',time:'يوما عمل',icon:'book'},
  {id:'technical',name:'دعم تقني',unit:'الدعم التقني',time:'يوم عمل واحد',icon:'ticket'},
- {id:'letter',name:'خطاب تعريف',unit:'الشؤون الإدارية',time:'يومان عمل',icon:'file'},
+ {id:'letter',name:'خطاب تعريف',unit:'الشؤون الإدارية',time:'يوما عمل',icon:'file'},
  {id:'content',name:'طلب إضافة سلايدات',unit:'منسقو المقررات',time:'٣ أيام عمل',icon:'upload'},
- {id:'other',name:'استفسار عام',unit:'وحدة الدعم',time:'يومان عمل',icon:'info'}
+ {id:'other',name:'استفسار عام',unit:'وحدة الدعم',time:'يوما عمل',icon:'info'}
 ];
 const courseSlides = {
  anatomy:[['Human Anatomy','A sample lecture for the digital library'],['Learning objectives','Explore the lecture structure, organize course resources, and review key concepts with your instructor.'],['Session outline','01 Introduction to the topic\n02 Illustrations and class discussion\n03 Summary and guided review'],['Thank you','Demonstration material only. Replace with instructor-approved course slides.']],
