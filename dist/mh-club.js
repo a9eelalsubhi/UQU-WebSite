@@ -56,7 +56,7 @@ function clubApply(p){
  ${p.questions.map((q,i)=>`<div class="field"><label for="q${i}">${q}</label><textarea id="q${i}" name="q${i}" rows="3" required maxlength="600">${e(draft['q'+i]||'')}</textarea></div>`).join('')}
  <div class="field"><label for="hours">التفرغ الأسبوعي المتوقع</label><select id="hours" name="hours">${['ساعتان','3–4 ساعات','5 ساعات فأكثر'].map(h=>`<option ${draft.hours===h?'selected':''}>${h}</option>`).join('')}</select></div>
  <fieldset class="field mh-share"><legend>مشاركة أجزاء من ملفك الشخصي (اختياري، بموافقتك)</legend>${[['memberships','عضوياتي السابقة'],['achievements','الإنجازات الموثقة'],['clinical','الجواز السريري']].map(([k,t])=>`<label><input type="checkbox" name="share" value="${k}" ${draft.share?.includes(k)?'checked':''}> ${t}</label>`).join('')}</fieldset>
- <div class="mh-form-actions"><button class="btn" name="go" value="submit">إرسال الطلب</button><button class="btn secondary" name="go" value="draft">حفظ كمسودة</button></div></form>`;
+ <button type="button" class="text-button" data-action="mh-report" data-type="استخدام قسم في المنصة" data-context="student-club/apply/${p.id}">${icon('alert')} مشكلة في التقديم؟</button><div class="mh-form-actions"><button class="btn" name="go" value="submit">إرسال الطلب</button><button class="btn secondary" name="go" value="draft">حفظ كمسودة</button></div></form>`;
 }
 function clubApps(){
  const steps=['submitted','screened','interview','offer','accepted'];
