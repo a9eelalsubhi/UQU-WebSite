@@ -13,7 +13,7 @@ Object.assign(paths,{
  passport:'<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/>'
 });
 const MHS=(()=>{
- const KEY='medhub-state-v1',base={done:[],saved:[],notes:{},answers:{},recent:[],log:[],logStatus:{},osceChecks:{},osceFav:[],apps:[],drafts:{},taskStatus:{},myTasks:[],events:[],decisions:{},seenNotes:[]};
+ const KEY='medhub-state-v1',base={done:['msk-7','msk-8','msk-9','msk-10','msk-12','msk-13','msk-14','cns-2','cns-1','cns-5'],saved:[],notes:{},answers:{},recent:[],log:[],logStatus:{},osceChecks:{},osceFav:[],apps:[],drafts:{},taskStatus:{},myTasks:[],events:[],decisions:{},seenNotes:[]};
  let s={};try{s=JSON.parse(localStorage.getItem(KEY))||{};}catch{}
  s={...base,...s};
  return {s,save(){try{localStorage.setItem(KEY,JSON.stringify(s));}catch{toast('تعذر الحفظ في هذا المتصفح.');}},reset(){Object.keys(s).forEach(k=>delete s[k]);Object.assign(s,JSON.parse(JSON.stringify(base)));this.save();}};
@@ -57,8 +57,8 @@ mhViews.home=()=>{
  <div class="mh-home-grid">
   <section class="mh-continue" aria-labelledby="continue-h">
    <h2 id="continue-h">أكمل من حيث توقفت</h2>
-   <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty} · الأسبوع ${last.week}</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button>
-   <div class="mh-tally"><div><b>${pr.done}</b><span>محاضرة أنجزتها</span></div><div><b>${pr.total-pr.done}</b><span>متبقية في الموديول</span></div><div class="mh-tally-bar">${bar(pr.p,'إنجاز الموديول')}<small>${pr.p}% من ${e(m.name)} · متابعة شخصية وليست إثبات حضور</small></div></div>
+   <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty} · الأسبوع ${last.week}</span><span class="mh-continue-progress">${bar(pr.p,'إنجاز الموديول')} أنجزت ${pr.done} من ${pr.total} محاضرات في هذا الموديول</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button>
+   <p class="mh-fine">التقدم متابعة شخصية لمذاكرتك، وليس إثبات حضور رسمي.</p>
   </section>
   <section class="mh-schedule" aria-labelledby="sched-h">
    <div class="mh-sec-title"><h2 id="sched-h">جدول اليوم</h2><button class="text-button" data-action="mh-go" data-view="student-calendar" data-page="day">اليوم كاملًا ${icon('arrowLeft')}</button></div>
