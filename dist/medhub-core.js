@@ -83,7 +83,7 @@ function searchIndex(){
  const idx=[];
  MH.modules.forEach(m=>{idx.push({kind:'موديول',title:m.name,sub:`${m.en} · السنة ${m.year}`,go:['basic-years','module',m.id],text:m.name+m.en+m.about});
   m.lectures.forEach(l=>idx.push({kind:'محاضرة',title:l.title,sub:`${m.name} · ${l.specialty} · الأسبوع ${l.week}`,go:['basic-years','lecture',l.id],text:l.title+l.specialty+l.doctor+l.objectives.join(' '),filters:{year:m.year,week:l.week,spec:l.specialty}}));});
- MH.extraCourses.forEach(c=>idx.push({kind:'مقرر',title:c.name,sub:c.en,go:['basic-years','extra'],text:c.name+c.en}));
+ MH.extraCourses.forEach(c=>idx.push({kind:'مقرر',title:c.name,sub:c.en,go:['basic-years','home'],text:c.name+c.en}));
  MH.clinical.rotations.forEach(r=>idx.push({kind:'روتيشن',title:r.name,sub:`${r.en} · ${r.site}`,go:['clinical-years','rotation',r.id],text:r.name+r.en+r.site}));
  MH.clinical.osce.forEach(o=>idx.push({kind:'محطة OSCE',title:o.name,sub:o.en,go:['clinical-years','osce',o.id],text:o.name+o.en+o.skill}));
  MH.club.units.forEach(u=>idx.push({kind:'النادي',title:u.name,sub:u.about,go:['student-club','unit',u.id],text:u.name+u.about}));
