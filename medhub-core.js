@@ -59,7 +59,7 @@ mhViews.home=()=>{
  const today=MH.events.filter(ev=>ev.date===MH.today&&!ev.cancelled).concat(s.events.filter(ev=>ev.date===MH.today)).sort((a,b)=>a.start.localeCompare(b.start));
  const upcoming=MH.events.filter(ev=>['exam','deadline'].includes(ev.type)&&ev.date>MH.today&&!ev.cancelled).slice(0,3);
  const weeks=Array.from({length:m.weeks},(_,i)=>i+1);
- const places=[['basic-years','book','محاضراتي','الموديولات والملفات والأسئلة'],['student-calendar','calendar','التقويم','محاضراتك واختباراتك ومواعيدك'],['activities','flag','الأنشطة','فعاليات وتطوع ومبادرات'],['training','award','التدريب','دورات وورش ومسارات مهارات'],['student-club','users','النادي','الفرق واللجان والتقديم'],['clinical-years','stethoscope','السنوات السريرية','الروتيشن والسجل وOSCE'],['portfolio','passport','ملفي','إنجازاتي وسيرتي الذاتية'],['services','info','الخدمات والدعم','أدلة وروابط وطلبات دعم']];
+ const places=[['basic-years','book','محاضراتي','الموديولات والملفات والأسئلة'],['student-calendar','calendar','التقويم','محاضراتك واختباراتك ومواعيدك'],['activities','flag','الأنشطة','فعاليات وتطوع ومبادرات'],['research','research','البحث العلمي','فرص بحثية ومشروعي'],['training','award','التدريب','دورات وورش ومسارات مهارات'],['student-club','users','النادي','الفرق واللجان والتقديم'],['clinical-years','stethoscope','السنوات السريرية','الروتيشن والسجل وOSCE'],['portfolio','passport','ملفي','إنجازاتي وسيرتي الذاتية'],['services','info','الخدمات والدعم','أدلة وروابط وطلبات دعم']];
  return `<div class="mh-home">
  <section class="mh-today">
   <div class="mh-today-head"><p class="mh-date">${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} <span lang="en">${m.en}</span></p></div>
