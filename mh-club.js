@@ -3,7 +3,8 @@
 const CL=MH.club;
 const catAr={exec:['اللجان التنفيذية','Executive Committees'],team:['الفرق التخصصية','Specialized Teams'],prog:['البرامج المستمرة','Continuous Programs']};
 const appStatusAr={draft:'مسودة',submitted:'قيد المراجعة',screened:'اجتاز الفرز',interview:'مقابلة مجدولة',offer:'عرض عضوية',accepted:'عضوية مفعّلة',waitlist:'قائمة الانتظار',rejected:'لم يُقبل',withdrawn:'مسحوب'};
-const clubTabs=[['home','النادي'],['structure','الهيكل التنظيمي'],['explore','استكشف'],['positions','فرص التقديم'],['apps','طلباتي'],['mine','ناديي'],['workspace','مساحة الفريق'],['admissions','لجنة القبول']];
+const clubTabs=[['home','النادي'],['positions','التقديم'],['mine','ناديي']];
+const clubGroups={home:[['home','نظرة عامة'],['structure','الهيكل التنظيمي'],['explore','الفرق واللجان']],positions:[['positions','الفرص المفتوحة'],['apps','طلباتي']],mine:[['mine','عضوياتي ومهامي'],['workspace','مساحة الفريق'],['admissions','لجنة القبول']]};
 const unitById=id=>CL.units.find(u=>u.id===id);
 const posById=id=>CL.positions.find(p=>p.id===id);
 const posState=p=>MH.today<p.opens?'upcoming':MH.today>p.closes?'closed':'open';
@@ -13,12 +14,12 @@ function activeMemberships(){const s=MHS.s;return CL.memberships.filter(m=>!m.pa
 mhViews['student-club']=r=>{
  const page=r.page==='unit'?'explore':r.page==='apply'?'positions':r.page;
  const body={home:clubHome,structure:clubStructure,explore:()=>r.page==='unit'?clubUnit(unitById(r.id)):clubExplore(),positions:()=>r.page==='apply'?clubApply(posById(r.id)):clubPositions(),apps:clubApps,mine:clubMine,workspace:clubWorkspace,admissions:clubAdmissions}[page]||clubHome;
- return `<div class="mh-club"><header class="mh-club-head"><div><h1>النادي الطلابي</h1><p>${e(CL.about)}</p></div></header>
- <nav class="mh-subnav" aria-label="أقسام النادي">${clubTabs.map(([k,t])=>`<button data-action="mh-go" data-view="student-club" data-page="${k}" ${k===page?'aria-current="page"':''}>${t}</button>`).join('')}</nav>${body()}</div>`;
+ return `<div class="mh-club"><header class="mh-club-head"><div><h1>النادي الطلابي</h1></div></header>
+ ${sectionNav('student-club',clubTabs,clubGroups,r.page==='unit'?'explore':r.page==='apply'?'positions':r.page)}${body()}</div>`;
 };
 function clubHome(){
  const open=CL.positions.filter(p=>posState(p)==='open'),apps=myApps().filter(a=>!['rejected','withdrawn'].includes(a.status));
- return `<div class="mh-club-home"><section class="mh-club-lead"><h2>القيادة</h2><ul>${CL.leaders.map(([r,n])=>`<li><span class="avatar">${n[0]}</span><span><strong>${n}</strong><small>${r}</small></span></li>`).join('')}</ul></section>
+ return `<p class="mh-lede">${e(CL.about)}</p><div class="mh-club-home"><section class="mh-club-lead"><h2>القيادة</h2><ul>${CL.leaders.map(([r,n])=>`<li><span class="avatar">${n[0]}</span><span><strong>${n}</strong><small>${r}</small></span></li>`).join('')}</ul></section>
  <section class="mh-club-news"><h2>الأخبار والإعلانات</h2><ul>${CL.news.map(n=>`<li class="${n.pinned?'pinned':''}"><time>${arDate(n.date)}</time><span>${n.pinned?'<b>مثبّت</b> ':''}${e(n.title)}</span></li>`).join('')}</ul></section>
  <section class="mh-club-open"><div class="mh-sec-title"><h2>فرص مفتوحة الآن</h2><button class="text-button" data-action="mh-go" data-view="student-club" data-page="positions">كل الفرص ${icon('arrowLeft')}</button></div><ul>${open.map(p=>`<li><button data-action="mh-go" data-view="student-club" data-page="apply" data-id="${p.id}"><strong>${p.title}</strong><span>${unitById(p.unit).name}</span><small>يغلق ${arDate(p.closes)} · ${p.seats} مقاعد</small></button></li>`).join('')}</ul></section>
  <section class="mh-club-mine"><h2>طلباتي النشطة</h2>${apps.length?`<ul>${apps.map(a=>`<li><strong>${posById(a.pos).title}</strong> · ${unitById(posById(a.pos).unit).name}<span class="mh-pill s-${a.status}">${appStatusAr[a.status]}</span></li>`).join('')}</ul>`:'<p>لا طلبات نشطة.</p>'}<button class="btn secondary small" data-action="mh-go" data-view="student-club" data-page="apps">متابعة طلباتي</button></section></div>`;
