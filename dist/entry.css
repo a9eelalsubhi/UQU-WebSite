@@ -1,0 +1,57 @@
+/* Entry: a teal brand panel carrying the logo's pillar arch, beside four clear role tiles. */
+body.selecting-role #role-entry{padding:0;background:var(--bg)!important}
+.gate2{min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.gate2-brand{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:clamp(28px,5vw,72px);padding-bottom:clamp(180px,26vh,280px);background:radial-gradient(120% 80% at 50% 110%,#0b5c57 0,transparent 60%),#06403d;color:#e9f4f1}
+.gate2-logo{width:clamp(96px,9vw,132px);height:auto;filter:brightness(0) invert(1);opacity:.96}
+.gate2-copy h1{font-family:var(--font-display);font-size:clamp(40px,4.6vw,68px);line-height:1.12;font-weight:900;color:#fff;margin:0 0 14px}
+.gate2-copy p{font-size:clamp(16px,1.3vw,19px);line-height:1.85;color:#cfe4de;max-width:34ch}
+.gate2 .pillars{position:absolute;inset-inline:clamp(28px,5vw,72px);bottom:0;width:auto;height:clamp(150px,24vh,250px)}
+.pillar{fill:#ffffff1f;transform-box:fill-box;transform-origin:50% 100%;animation:pillar-rise 1.4s var(--ease-out) both;animation-delay:calc(var(--i) * 70ms + .15s)}
+.pillar.gold{fill:#e6c47c}
+@keyframes pillar-rise{from{transform:scaleY(.08);opacity:0}}
+.gate2-brand:hover .pillar:not(.gold){fill:#ffffff29;transition:fill .6s}
+
+.gate2-panel{display:flex;flex-direction:column;padding:clamp(20px,3vw,40px) clamp(20px,4.5vw,72px)}
+.gate2-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.gate2-top .gate-official{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14px;color:var(--muted)}
+.gate2-top .gate-official:hover{color:var(--green)}
+.gate2-top .gate-official .icon{width:15px;height:15px}
+.gate2-body{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:720px;width:100%;margin-inline:auto;padding:32px 0}
+.gate2-body h2{font-family:var(--font-display);font-size:clamp(28px,2.6vw,38px);margin-bottom:6px}
+.gate2-hint{color:var(--muted);font-size:16px;margin-bottom:26px}
+.gate2-roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.gate2-role{--role:#0a6b66;display:grid;grid-template-rows:auto auto 1fr auto;justify-items:start;gap:6px;text-align:right;min-height:200px;padding:22px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);transition:border-color .25s,box-shadow .3s var(--ease-out),transform .3s var(--ease-out)}
+.gate2-role.blue{--role:#2f64a8}.gate2-role.gold{--role:#9a6d1f}.gate2-role.purple{--role:#6b4fa0}
+[data-theme="dark"] .gate2-role{--role:#7fd0bd}[data-theme="dark"] .gate2-role.blue{--role:#8db8e6}[data-theme="dark"] .gate2-role.gold{--role:#e0bd73}[data-theme="dark"] .gate2-role.purple{--role:#c3a8ee}
+.gate2-role:hover{border-color:color-mix(in srgb,var(--role) 50%,var(--line));box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.gate2-role:active{transform:translateY(-1px) scale(.99)}
+.gate2-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:color-mix(in srgb,var(--role) 12%,var(--surface));color:var(--role);margin-bottom:8px;transition:background-color .25s,color .25s}
+.gate2-icon .icon{width:27px;height:27px}
+.gate2-role:hover .gate2-icon{background:var(--role);color:var(--surface)}
+.gate2-role strong{font-size:19px;font-weight:600;color:var(--ink)}
+.gate2-desc{font-size:14.5px;line-height:1.7;color:var(--muted)}
+.gate2-go{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:14px;font-weight:500;color:var(--role)}
+.gate2-go .icon{width:16px;height:16px;transition:transform .3s var(--ease-out)}
+.gate2-role:hover .gate2-go .icon{transform:translateX(-4px)}
+.gate2-foot{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+.gate2-foot .icon{width:15px;height:15px;flex-shrink:0}
+
+@media (max-width:980px){
+ .gate2{grid-template-columns:1fr}
+ .gate2-brand{min-height:auto;flex-direction:row;align-items:center;gap:18px;padding:22px 20px 96px}
+ .gate2-copy h1{font-size:34px;margin-bottom:6px}
+ .gate2-copy p{font-size:15px}
+ .gate2-logo{width:76px}
+ .gate2 .pillars{height:86px;inset-inline:20px}
+ .gate2-panel{padding:16px 20px 24px}
+ .gate2-body{padding:16px 0 24px}
+}
+@media (max-width:560px){
+ .gate2-brand{flex-direction:column;align-items:flex-start}
+ .gate2-roles{grid-template-columns:1fr}
+ .gate2-role{min-height:0;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:14px;padding:16px;align-items:center}
+ .gate2-icon{grid-row:1/3;margin:0;width:48px;height:48px}
+ .gate2-go{display:none}
+ .gate2-top .theme-label{display:none}
+}
+@media (prefers-reduced-motion:reduce){.pillar{animation:none}}

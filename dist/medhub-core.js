@@ -64,7 +64,7 @@ mhViews.home=()=>{
  <section class="mh-today">
   <div class="mh-today-head"><p class="mh-date">${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} <span lang="en">${m.en}</span></p></div>
   <ol class="mh-weeks" aria-label="أسابيع الموديول">${weeks.map(w=>`<li class="${w<m.week?'past':w===m.week?'now':''}"><span>الأسبوع ${w}</span>${w===m.week?'<b>الآن</b>':''}</li>`).join('')}</ol>
-  <canvas class="mh-today-pulse" data-pulse-scene="compact" aria-hidden="true"></canvas>
+  <div class="mh-today-pillars">${pillarArch(13)}</div>
  </section>
  <div class="mh-home-grid">
   <section class="mh-continue" aria-labelledby="continue-h"><h2 id="continue-h">${icon('play')} أكمل من حيث توقفت</h2>
