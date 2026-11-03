@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#116963">
+  <meta name="description" content="نموذج تفاعلي لمبادرة التحول الرقمي بكلية الطب، جامعة أم القرى. التذاكر والطلبات ومكتبة السلايدات ومتابعة المبادرات.">
+  <title>بوابة كلية الطب | جامعة أم القرى</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/type.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+  <link rel="stylesheet" href="overview.css">
+  <link rel="stylesheet" href="student.css">
+  <link rel="stylesheet" href="lectures.css">
+  <script>history.scrollRestoration="manual";try{document.documentElement.dataset.theme=localStorage.getItem("colmed-theme")==="dark"?"dark":"light"}catch{document.documentElement.dataset.theme="light"}</script>
+  <script src="app.js" defer></script>
+  <script src="portal.js" defer></script>
+  <script src="overview.js" defer></script>
+  <script src="student.js" defer></script>
+  <script src="lectures-data.js" defer></script>
+  <script src="lectures-ui.js" defer></script>
+</head>
+<body class="selecting-role">
+  <section id="role-entry" aria-label="اختيار مساحة العمل"></section>
+  <a class="skip-link" href="#main">انتقل إلى المحتوى</a>
+  <div class="mobile-overlay" id="mobile-overlay"></div>
+  <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+    <a href="#overview" class="brand" aria-label="بوابة كلية الطب، الرئيسية"><img src="assets/college-logo-hq.png" alt="جامعة أم القرى، كلية الطب" width="400" height="400"></a>
+    <div class="brand-rule"></div>
+    <div class="portal-name">بوابة كلية الطب <span>منظومة الخدمات والمبادرات</span></div>
+    <div class="nav-label">مساحة العمل</div>
+    <nav id="nav"></nav>
+    <div class="sidebar-bottom">
+      <div class="initiative-note"><span class="note-icon" data-icon="sparkles"></span><strong>نحو كلية أكثر اتصالًا</strong><p>مبادرة التحول الرقمي<br>بإشراف د. أحمد مفتي</p><button class="text-button" id="guide-button">دليل العرض <span data-icon="arrowLeft"></span></button></div>
+      <a class="official-link" href="https://uqu.edu.sa/colmedsc" target="_blank" rel="noopener">موقع الكلية الرسمي <span data-icon="external"></span></a>
+      <button class="sidebar-user" id="role-hint"><span class="avatar">ع</span><span><strong id="sidebar-role">منظور الإدارة</strong><small>حساب العرض التجريبي</small></span><span data-icon="chevrons"></span></button>
+    </div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="topbar-title"><button class="icon-button mobile-menu" id="menu-button" aria-label="فتح القائمة" aria-expanded="false"><span data-icon="menu"></span></button><span class="crumb">بوابة الكلية</span><span class="crumb-separator">/</span><strong id="breadcrumb">نظرة عامة</strong></div>
+      <div class="topbar-tools"><span class="demo-badge"><i></i> نموذج تفاعلي</span><button class="role-switch" data-action="choose-role" title="العودة لاختيار مساحة العمل"><span data-icon="users"></span><span id="active-role-label">اختيار الدور</span><span data-icon="chevrons"></span></button><button class="theme-toggle" data-action="toggle-theme" aria-label="تفعيل الوضع الداكن" aria-pressed="false"><span data-theme-icon></span><span class="theme-label">الوضع الداكن</span></button><button class="icon-button" id="notifications-button" aria-label="عرض التنبيهات"><span data-icon="bell"></span><i class="notification-dot"></i></button></div>
+    </header>
+    <main id="main" tabindex="-1"></main>
+    <footer><span>مبادرة التحول الرقمي · كلية الطب، جامعة أم القرى</span><span><i class="footer-dot"></i> بيانات تجريبية محفوظة في هذا المتصفح</span></footer>
+  </div>
+  <dialog id="main-dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
