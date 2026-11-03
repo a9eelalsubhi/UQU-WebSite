@@ -29,15 +29,21 @@ const bar=(p,label='')=>`<span class="mh-bar" role="progressbar" aria-valuenow="
 function moduleProgress(m){const done=m.lectures.filter(l=>MHS.s.done.includes(l.id)).length;return {done,total:m.lectures.length,p:pctOf(done,m.lectures.length)};}
 function renderMH(sub=false){
  const fn=mhViews[view];if(!fn)return false;
- const r=mhRoute[view];main.innerHTML=fn(r)||'';hydrateIcons(main);
+ const r=mhRoute[view];main.innerHTML=fn(r)||'';
+ const info=sectionInfo[view],h=main.querySelector('.mh-head h1,.mh-chart-head h1,.mh-club-head h1,.mh-cal-head h1');
+ if(info&&h){h.insertAdjacentHTML('beforebegin',`<span class="mh-sec-badge">${icon(info[0])}</span>`);if(info[1]&&!h.nextElementSibling)h.insertAdjacentHTML('afterend',`<p class="mh-sec-lead">${info[1]}</p>`);}
+ hydrateIcons(main);
  mhViews[view+':after']?.(r);
  if(sub){window.scrollTo({top:0,behavior:'instant'});main.focus({preventScroll:true});window.mhEnter?.();}
  return true;
 }
 // Sections show a few tabs; related pages inside a tab sit behind a small segmented switch.
+// Every tab and switch carries an icon so its purpose reads at a glance.
+const tabIcon={home:'grid',rotation:'calendar',logbook:'note',skills:'target',osce:'timer',tutor:'stethoscope',station:'timer',passport:'passport',assess:'checkCircle',structure:'org',explore:'search',positions:'send',apps:'inbox',mine:'users',workspace:'columns',admissions:'lock',volunteer:'users',regs:'ticket',shifts:'clock',contrib:'award',organizer:'settings',catalog:'book',bookings:'calendar',record:'award',pathways:'flag',instructor:'user',guides:'file',help:'info',support:'inbox',new:'plus',team:'users',items:'award',add:'plus',evidence:'clip',verifier:'shield',cv:'file',share:'shield',reviewer:'user',journey:'flag',profile:'user'};
+const sectionInfo={'basic-years':['book','المحاضرات والموارد وتقدّمك في السنوات الأولى إلى الثالثة.'],'clinical-years':['stethoscope','تدريبك في المستشفى، سجلك السريري، ومهاراتك وتقييماتك.'],'student-club':['users','الفرق واللجان، فرص التقديم، وعضوياتك ومهامك.'],'student-calendar':['calendar','محاضراتك واختباراتك ومواعيدك الشخصية في جدول واحد.'],activities:['flag','فعاليات الكلية وحملاتها، فرص التطوع، والمشاريع الكبرى.'],training:['award','الدورات والورش، حجوزاتك، ومسارات تطوير مهاراتك.'],services:['info','الخدمات والأدلة الموثوقة، والدعم عند مواجهة مشكلة في المنصة.'],portfolio:['passport','إنجازاتك وخبراتك، توثيقها، ومشاركتها وسيرتك الذاتية.'],supervision:['stethoscope','']};
 function sectionNav(view,tabs,groups,page){
  const g=Object.entries(groups).find(([,items])=>items.some(([p])=>p===page)),tab=g?g[0]:page;
- return `<nav class="mh-subnav" aria-label="أقسام الصفحة">${tabs.map(([k,t])=>`<button data-action="mh-go" data-view="${view}" data-page="${k}" ${k===tab?'aria-current="page"':''}>${t}</button>`).join('')}</nav>${g&&g[1].length>1?`<div class="mh-seg mh-inner" role="group" aria-label="عرض">${g[1].map(([p,t])=>`<button class="${p===page?'active':''}" data-action="mh-go" data-view="${view}" data-page="${p}">${t}</button>`).join('')}</div>`:''}`;
+ return `<nav class="mh-subnav" aria-label="أقسام الصفحة">${tabs.map(([k,t])=>`<button data-action="mh-go" data-view="${view}" data-page="${k}" ${k===tab?'aria-current="page"':''}>${icon(tabIcon[k]||'grid')}<span>${t}</span></button>`).join('')}</nav>${g&&g[1].length>1?`<div class="mh-seg mh-inner" role="group" aria-label="عرض">${g[1].map(([p,t])=>`<button class="${p===page?'active':''}" data-action="mh-go" data-view="${view}" data-page="${p}">${icon(tabIcon[p]||'grid')}<span>${t}</span></button>`).join('')}</div>`:''}`;
 }
 function crumbs(view,items){return `<nav class="mh-crumbs" aria-label="مسار التنقل">${items.map(([label,page,id],i)=>i<items.length-1?`<button data-action="mh-go" data-view="${view}" data-page="${page}" ${id?`data-id="${id}"`:''}>${label}</button>${icon('chevronLeft')}`:`<span aria-current="page">${label}</span>`).join('')}</nav>`;}
 
@@ -52,17 +58,24 @@ mhViews.home=()=>{
  const last=lectureById(s.recent[0])||m.lectures.find(l=>!s.done.includes(l.id))||m.lectures[0];
  const today=MH.events.filter(ev=>ev.date===MH.today&&!ev.cancelled).concat(s.events.filter(ev=>ev.date===MH.today)).sort((a,b)=>a.start.localeCompare(b.start));
  const upcoming=MH.events.filter(ev=>['exam','deadline'].includes(ev.type)&&ev.date>MH.today&&!ev.cancelled).slice(0,3);
+ const weeks=Array.from({length:m.weeks},(_,i)=>i+1);
+ const places=[['basic-years','book','محاضراتي','الموديولات والملفات والأسئلة'],['student-calendar','calendar','التقويم','محاضراتك واختباراتك ومواعيدك'],['activities','flag','الأنشطة','فعاليات وتطوع ومبادرات'],['training','award','التدريب','دورات وورش ومسارات مهارات'],['student-club','users','النادي','الفرق واللجان والتقديم'],['clinical-years','stethoscope','السنوات السريرية','الروتيشن والسجل وOSCE'],['portfolio','passport','ملفي','إنجازاتي وسيرتي الذاتية'],['services','info','الخدمات والدعم','أدلة وروابط وطلبات دعم']];
  return `<div class="mh-home">
- <header class="mh-hello"><p>${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} · الأسبوع ${m.week} من ${m.weeks}</p></header>
- <section class="mh-continue" aria-labelledby="continue-h"><h2 id="continue-h" class="sr-only">أكمل من حيث توقفت</h2>
-  <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><span class="mh-continue-label">أكمل من حيث توقفت</span><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty}</span><span class="mh-continue-progress">${bar(pr.p,'إنجاز الموديول')} أنجزت ${pr.done} من ${pr.total} محاضرات</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button></section>
+ <section class="mh-today">
+  <div class="mh-today-head"><p class="mh-date">${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} <span lang="en">${m.en}</span></p></div>
+  <ol class="mh-weeks" aria-label="أسابيع الموديول">${weeks.map(w=>`<li class="${w<m.week?'past':w===m.week?'now':''}"><span>الأسبوع ${w}</span>${w===m.week?'<b>الآن</b>':''}</li>`).join('')}</ol>
+  <canvas class="mh-today-pulse" data-pulse-scene="compact" aria-hidden="true"></canvas>
+ </section>
  <div class="mh-home-grid">
-  <section aria-labelledby="sched-h"><div class="mh-sec-title"><h2 id="sched-h">اليوم</h2><button class="text-button" data-action="mh-go" data-view="student-calendar" data-page="week">التقويم ${icon('arrowLeft')}</button></div>
-   <ol class="mh-agenda">${today.map(ev=>`<li class="layer-${ev.layer}"><time>${ev.start}</time><span><strong dir="auto">${e(ev.title)}</strong><small>${e(ev.place||'')}</small></span></li>`).join('')||'<li class="empty">لا مواعيد اليوم.</li>'}</ol></section>
-  <section aria-labelledby="next-h"><h2 id="next-h">قادم</h2>
-   <ul class="mh-upcoming">${upcoming.map(ev=>`<li><time>${arDate(ev.date)}</time><span>${e(ev.title)}</span></li>`).join('')}</ul>
-   <h2 class="mh-gap">آخر تحديث</h2><p class="mh-latest">${e(MH.announcements[0].text)} <small>${e(MH.announcements[0].from)}</small></p><button class="text-button" data-action="mh-notes">كل الإشعارات ${icon('arrowLeft')}</button></section>
- </div></div>`;
+  <section class="mh-continue" aria-labelledby="continue-h"><h2 id="continue-h">${icon('play')} أكمل من حيث توقفت</h2>
+   <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty} · الأسبوع ${last.week}</span><span class="mh-continue-progress">${bar(pr.p,'إنجاز الموديول')} أنجزت ${pr.done} من ${pr.total} محاضرات</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button>
+   <h2 class="mh-gap">${icon('bell')} آخر تحديث</h2><p class="mh-latest">${e(MH.announcements[0].text)} <small>${e(MH.announcements[0].from)}</small></p><button class="text-button" data-action="mh-notes">كل الإشعارات ${icon('arrowLeft')}</button></section>
+  <section aria-labelledby="sched-h"><div class="mh-sec-title"><h2 id="sched-h">${icon('clock')} اليوم</h2><button class="text-button" data-action="mh-go" data-view="student-calendar" data-page="week">التقويم ${icon('arrowLeft')}</button></div>
+   <ol class="mh-agenda">${today.map(ev=>`<li class="layer-${ev.layer}"><time>${ev.start}</time><span><strong dir="auto">${e(ev.title)}</strong><small>${MH.types[ev.type]||''} · ${e(ev.place||'')}</small></span></li>`).join('')||'<li class="empty">لا مواعيد اليوم.</li>'}</ol>
+   <h2 class="mh-gap">${icon('alert')} قادم</h2><ul class="mh-upcoming">${upcoming.map(ev=>`<li><time>${arDate(ev.date)}</time><span>${e(ev.title)}</span><em class="type-${ev.type}">${MH.types[ev.type]}</em></li>`).join('')}</ul></section>
+ </div>
+ <nav class="mh-places" aria-labelledby="places-h"><h2 id="places-h">${icon('grid')} كل ما في المنصة</h2><ul>${places.map(([v,ico,t,d])=>`<li><button data-action="mh-go" data-view="${v}" data-page="${mhRoute[v]?.page==='week'?'week':'home'}"><span class="mh-place-icon">${icon(ico)}</span><span><strong>${t}</strong><small>${d}</small></span></button></li>`).join('')}</ul></nav>
+ </div>`;
 };
 
 // Unified search across sections
@@ -78,7 +91,7 @@ function searchIndex(){
  return idx;
 }
 function openSearch(q=''){
- openDialog(`${dialogHeader('البحث في المنصة','اضغط Ctrl+K من أي صفحة')}<div class="dialog-body mh-search"><label class="search-field">${icon('search')}<input id="mh-q" type="search" placeholder="محاضرة، موديول، هدف تعليمي، روتيشن، فريق، موعد…" value="${e(q)}" autocomplete="off"></label><div class="mh-search-kinds" role="group" aria-label="نوع المحتوى">${['الكل','محاضرة','موديول','روتيشن','محطة OSCE','النادي','موعد'].map((k,i)=>`<button class="${i?'':'active'}" data-kind="${k}">${k}</button>`).join('')}</div><div id="mh-results" aria-live="polite"></div></div>`,true);
+ openDialog(`${dialogHeader('البحث في المنصة','اضغط Ctrl+K من أي صفحة')}<div class="dialog-body mh-search"><label class="search-field">${icon('search')}<input id="mh-q" type="search" placeholder="محاضرة، موديول، هدف تعليمي، روتيشن، فريق، موعد…" value="${e(q)}" autocomplete="off"></label><div class="mh-search-kinds" role="group" aria-label="نوع المحتوى">${['الكل','محاضرة','موعد','فعالية','دورة','خدمة','إنجاز','روتيشن','النادي'].map((k,i)=>`<button class="${i?'':'active'}" data-kind="${k}">${k}</button>`).join('')}</div><div id="mh-results" aria-live="polite"></div></div>`,true);
  const idx=searchIndex();let kind='الكل';
  const draw=()=>{const v=$('#mh-q').value.trim().toLowerCase();const hits=idx.filter(x=>(kind==='الكل'||x.kind===kind)&&(!v||(x.title+x.text+x.sub).toLowerCase().includes(v))).slice(0,30);
   $('#mh-results').innerHTML=hits.length?`<ul>${hits.map(h=>`<li><button data-action="mh-go" data-view="${h.go[0]}" data-page="${h.go[1]}" ${h.go[2]?`data-id="${h.go[2]}"`:''}><em>${h.kind}</em><strong>${e(h.title)}</strong><small>${e(h.sub)}</small></button></li>`).join('')}</ul>`:`<p class="mh-empty">لا نتائج لـ «${e(v)}». جرّب اسم المحاضرة بالإنجليزية أو اسم التخصص.</p>`;};
@@ -93,7 +106,7 @@ function notifications(){
   {id:'n3',icon:'file',text:'تحديث في ملف محاضرة Patterns of Injury.',when:'2026-11-01',go:['basic-years','lecture','cns-6']},
   {id:'n4',icon:'users',text:'حُدّد موعد مقابلتك في فريق الجراحة: الجمعة 1:00 م.',when:'2026-11-02',go:['student-club','apps']},
   {id:'n5',icon:'stethoscope',text:'طلب المشرف تعديل نشاط «عرض حالة في الجولة».',when:'2026-10-24',go:['clinical-years','logbook']},
-  {id:'n6',icon:'check',text:'أُسندت إليك مهمة: حجز قاعة ورشة الإسعافات.',when:'2026-11-01',go:['student-club','workspace']}];
+  {id:'n6',icon:'check',text:'أُسندت إليك مهمة: حجز قاعة ورشة الإسعافات.',when:'2026-11-01',go:['student-club','workspace']}].concat(window.mhExtraNotes?.()||[]).sort((a,b)=>b.when.localeCompare(a.when));
  openDialog(`${dialogHeader('الإشعارات')}<div class="dialog-body"><ul class="mh-notes">${list.map(n=>`<li class="${s.seenNotes.includes(n.id)?'':'unread'}"><button data-action="mh-go" data-view="${n.go[0]}" data-page="${n.go[1]}" ${n.go[2]?`data-id="${n.go[2]}"`:''} data-note="${n.id}">${icon(n.icon)}<span>${e(n.text)}<small>${arDate(n.when)}</small></span></button></li>`).join('')}</ul><p class="mh-fine">تصلك إشعارات المواد والمواعيد والجهات التي تنتمي إليها فقط.</p></div>`);
 }
 

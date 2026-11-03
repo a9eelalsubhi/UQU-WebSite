@@ -36,7 +36,7 @@ function clinicalRotation(r){
  <section><h2>الجدول الأسبوعي</h2><table class="mh-week-table"><thead><tr>${days.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>${week.map(row=>`<tr>${row.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
  <h2>المواد التعليمية</h2><ul class="mh-plain"><li>${icon('file')} Clinical Module Hub: Internal Medicine — Study Guide</li><li>${icon('file')} OSCE Preparation: محطات الباطنة</li><li>${icon('play')} تسجيلات جلسات CbD</li></ul></section></div>
  <div class="mh-alert">${icon('alert')}<span><strong>تنبيه تعارض:</strong> تقييم DOPS يوم 12 نوفمبر يتداخل مع عيادة الصدرية. أُبلغ منسق الروتيشن؛ لا يتغير أي موعد رسمي تلقائيًا.</span></div>`:'<p class="mh-empty">تظهر تفاصيل الروتيشن وجدوله عند بدايته.</p>'}
- <section><h2>توزيع الروتيشنات</h2>${rotationTimeline()}</section>`;
+ <section><h2>توزيع الروتيشنات</h2>${rotationTimeline()}</section><button class="text-button" data-action="mh-report" data-type="عرض الموارد" data-context="clinical-years/rotation/${r.id}">${icon('alert')} الإبلاغ عن مشكلة في عرض الجدول</button>`;
 }
 function clinicalLogbook(){
  const log=clinicalLog().sort((a,b)=>b.date.localeCompare(a.date)),isNew=mhRoute['clinical-years'].id==='new';

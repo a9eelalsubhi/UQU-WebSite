@@ -1,0 +1,113 @@
+'use strict';
+// Activities & Initiatives: explore, register, volunteer, contributions, organizer tools, major project workspace.
+const st=(k,d)=>MHS.s[k]??(MHS.s[k]=d);
+const MY_YEAR=3;
+const evById=id=>MH2.events.find(x=>x.id===id);
+function actRegs(){const o=st('actRegs',[]),ov=st('actRegOv',{});return MH2.regs.concat(o).map(r=>({...r,status:ov[r.id]||r.status}));}
+function myReg(evId){return actRegs().find(r=>r.event===evId&&!['withdrawn'].includes(r.status));}
+function evSeats(ev){const extra=st('actRegs',[]).filter(r=>r.event===ev.id&&['accepted','submitted','review'].includes(r.status)).length;return {taken:Math.min(ev.seats,ev.taken+extra),left:Math.max(0,ev.seats-ev.taken-extra)};}
+function evRegState(ev){return ev.past?'past':MH.today<ev.opens?'soon':MH.today>ev.closes?'closed':evSeats(ev).left?'open':'full';}
+const regStateAr={open:'التسجيل مفتوح',full:'المقاعد مكتملة — قائمة انتظار',closed:'أُغلق التسجيل',soon:'يفتح قريبًا',past:'انتهت'};
+const actTabs=[['home','استكشف'],['regs','تسجيلاتي'],['contrib','مساهماتي'],['organizer','لوحة المنظم']];
+const actGroups={home:[['home','الرئيسية'],['explore','كل الفعاليات'],['volunteer','فرص التطوع']],regs:[['regs','الفعاليات'],['shifts','شفتاتي']]};
+mhViews.activities=r=>{
+ const inProject=r.page==='project';
+ const tabPage={event:'explore',initiative:'home',project:'home'}[r.page]||r.page;
+ const body={home:actHome,explore:actExplore,volunteer:actVolunteer,regs:actMyRegs,shifts:actShifts,contrib:actContrib,organizer:actOrganizer,event:()=>actEvent(evById(r.id)),initiative:()=>actInitiative(MH2.initiatives.find(i=>i.id===r.id)||MH2.initiatives[0]),project:()=>actProject(r.tab||'dash')}[r.page]||actHome;
+ return `<div class="mh-act"><header class="mh-head"><div><h1>الأنشطة والمبادرات</h1></div><div class="mh-head-actions"><button class="btn secondary" data-action="mh-go" data-view="activities" data-page="project">${icon('columns')} مساحة مشروعي</button></div></header>
+ ${inProject?'':sectionNav('activities',actTabs,actGroups,tabPage)}${body()}</div>`;
+};
+function evRow(ev){const reg=myReg(ev.id),s=evRegState(ev),seats=evSeats(ev);
+ return `<li><button class="mh-evrow" data-action="mh-go" data-view="activities" data-page="event" data-id="${ev.id}"><time><b>${+ev.date.slice(8)}</b>${arDate(ev.date,{month:'short'})}</time><span><strong>${e(ev.title)}</strong><small>${ev.cats.map(c=>MH2.actCats[c]).join(' · ')} · ${ev.mode} · ${e(ev.org.join('، '))}</small></span><span class="mh-evstate s-${reg?reg.status:s}">${reg?MH2.regStatus[reg.status]:s==='open'?`${seats.left} مقعد متبقٍ`:regStateAr[s]}</span></button></li>`;}
+function actHome(){
+ const init=MH2.initiatives[0],open=MH2.events.filter(ev=>evRegState(ev)==='open'),mine=actRegs().filter(r=>['accepted','offer','submitted','review','waitlisted'].includes(r.status)&&!evById(r.event).past);
+ return `<section class="mh-feature"><div><span class="mh-feature-tag">مبادرة الشهر</span><h2>${init.name}</h2><p>${init.about}</p><div class="mh-head-actions"><button class="btn" data-action="mh-go" data-view="activities" data-page="initiative" data-id="${init.id}">تفاصيل المبادرة</button><button class="btn secondary" data-action="mh-go" data-view="activities" data-page="volunteer">تطوّع فيها</button></div></div><ol class="mh-phases">${init.phases.map(([n,s])=>`<li class="${s}">${n}</li>`).join('')}</ol></section>
+ <div class="mh-home-grid"><section><div class="mh-sec-title"><h2>التسجيل مفتوح الآن</h2><button class="text-button" data-action="mh-go" data-view="activities" data-page="explore">كل الفعاليات ${icon('arrowLeft')}</button></div><ol class="mh-evlist">${open.map(evRow).join('')}</ol></section>
+ <section><h2>القادم في تسجيلاتك</h2><ol class="mh-evlist">${mine.map(r=>evRow(evById(r.event))).join('')||'<li class="mh-empty">لم تسجل في فعالية قادمة.</li>'}</ol></section></div>`;
+}
+function actExplore(){
+ const f=st('actFilter',{q:'',cat:'all',when:'all',mode:'all',sort:'soon',mine:false});
+ let list=MH2.events.filter(ev=>(!f.q||(ev.title+ev.org.join('')).includes(f.q))&&(f.cat==='all'||ev.cats.includes(f.cat))&&(f.mode==='all'||ev.mode===f.mode)&&(f.when==='all'||(f.when==='upcoming'?!ev.past:ev.past))&&(!f.mine||myReg(ev.id)));
+ list=list.sort((a,b)=>f.sort==='closing'?a.closes.localeCompare(b.closes):f.sort==='new'?b.opens.localeCompare(a.opens):a.date.localeCompare(b.date));
+ const opt=(id,cur,pairs,label)=>`<select id="${id}" aria-label="${label}">${pairs.map(([v,t])=>`<option value="${v}" ${cur===v?'selected':''}>${t}</option>`).join('')}</select>`;
+ return `<div class="mh-filterbar"><label class="search-field">${icon('search')}<input id="act-q" type="search" placeholder="اسم الفعالية أو الجهة المنظمة" value="${e(f.q)}"></label>${opt('act-cat',f.cat,[['all','كل التصنيفات'],...Object.entries(MH2.actCats)],'التصنيف')}${opt('act-when',f.when,[['all','كل التواريخ'],['upcoming','القادمة'],['past','السابقة']],'التاريخ')}${opt('act-mode',f.mode,[['all','حضوري وعن بعد'],['حضوري','حضوري'],['عن بعد','عن بعد'],['هجين','هجين']],'طريقة الحضور')}${opt('act-sort',f.sort,[['soon','الأقرب موعدًا'],['new','الأحدث إعلانًا'],['closing','الأقرب لإغلاق التسجيل']],'الترتيب')}<label class="mh-toggle"><input type="checkbox" id="act-mine" ${f.mine?'checked':''}> المسجل فيها فقط</label></div>
+ <ol class="mh-evlist">${list.map(evRow).join('')||'<li class="mh-empty">لا فعاليات تطابق التصفية.</li>'}</ol>`;
+}
+function actEvent(ev){
+ const reg=myReg(ev.id),s=evRegState(ev),seats=evSeats(ev),eligible=ev.years.includes(MY_YEAR);
+ const cta=reg?`<p class="mh-regstate s-${reg.status}"><b>${MH2.regStatus[reg.status]}</b>${reg.status==='waitlisted'?` · ترتيبك ${reg.pos||1} في قائمة الانتظار`:''}${reg.status==='offer'?` · اقبل قبل ${arDate(reg.offerUntil)}`:''}</p>${reg.status==='offer'?`<button class="btn" data-action="act-offer" data-id="${reg.id}" data-to="accepted">قبول المقعد</button><button class="btn secondary" data-action="act-offer" data-id="${reg.id}" data-to="declined">اعتذار</button>`:''}${['accepted','submitted','review','waitlisted'].includes(reg.status)&&!ev.past?`<button class="btn secondary" data-action="act-withdraw" data-id="${reg.id}">الانسحاب</button>`:''}`
+  :!eligible?`<p class="mh-regstate s-declined">هذه الفعالية لطلاب السنوات ${ev.years.join('، ')}؛ أنت في السنة ${MY_YEAR}.</p>`
+  :s==='open'||s==='full'?`<button class="btn" data-action="act-register" data-id="${ev.id}">${s==='full'?'انضم لقائمة الانتظار':'سجّل الآن'}</button>`:`<p class="mh-regstate">${regStateAr[s]}</p>`;
+ return `${crumbs('activities',[['الأنشطة','home'],['كل الفعاليات','explore'],[ev.title]])}<article class="mh-event"><header class="mh-event-head"><div class="mh-poster" aria-hidden="true"><b>${+ev.date.slice(8)}</b><span>${arDate(ev.date,{month:'long'})}</span></div><div><h2>${e(ev.title)}</h2><p>${e(ev.org.join(' · '))}</p><ul class="mh-tags">${ev.cats.map(c=>`<li>${MH2.actCats[c]}</li>`).join('')}</ul></div></header>
+ <div class="mh-event-body"><div><p class="mh-big">${e(ev.about)}</p><h3>الأهداف</h3><ul class="mh-plain">${ev.goals.map(g=>`<li>${icon('check')} ${e(g)}</li>`).join('')}</ul><h3>البرنامج</h3><ol class="mh-agenda">${ev.sessions.map(([t,n])=>`<li><time>${t}</time><span><strong>${e(n)}</strong></span></li>`).join('')}</ol>${ev.prep?`<h3>قبل الحضور</h3><p>${e(ev.prep)}</p>`:''}</div>
+ <aside class="mh-event-side"><dl><div><dt>الموعد</dt><dd>${arDate(ev.date,{weekday:'long',day:'numeric',month:'long'})} · <bdi dir="ltr">${ev.start}–${ev.end}</bdi></dd></div><div><dt>المكان</dt><dd>${ev.mode} · ${e(ev.place)}</dd></div><div><dt>الفئة المستهدفة</dt><dd>السنوات ${ev.years.join('، ')}</dd></div><div><dt>التسجيل</dt><dd>${arDate(ev.opens)} — ${arDate(ev.closes)}${ev.review?' · يخضع للمراجعة':''}</dd></div><div><dt>المقاعد</dt><dd>${bar(Math.round(seats.taken/ev.seats*100))} ${seats.taken} من ${ev.seats}</dd></div></dl><div class="mh-cta">${cta}</div><p class="mh-fine">التسجيل لا يعني القبول تلقائيًا، والقبول لا يعني إثبات الحضور.</p>${ev.initiative?`<button class="text-button" data-action="mh-go" data-view="activities" data-page="initiative" data-id="${ev.initiative}">جزء من ${e(MH2.initiatives[0].name)} ${icon('arrowLeft')}</button>`:''}<button class="text-button mh-report" data-action="mh-report" data-type="تسجيل فعالية أو ورشة" data-context="activities/event/${ev.id}">${icon('alert')} الإبلاغ عن مشكلة في التسجيل</button></aside></div></article>`;
+}
+function actInitiative(i){
+ return `${crumbs('activities',[['الأنشطة','home'],[i.name]])}<section class="mh-feature"><div><h2>${i.name}</h2><p>${i.about}</p><p class="mh-fine">${i.org} · ${arDate(i.start)} — ${arDate(i.end)}</p></div><ol class="mh-phases">${i.phases.map(([n,s])=>`<li class="${s}">${n}</li>`).join('')}</ol></section>
+ <h2 class="mh-gap">فعاليات المبادرة</h2><ol class="mh-evlist">${i.events.map(id=>evRow(evById(id))).join('')}</ol><h2 class="mh-gap">فرص التطوع المرتبطة</h2><p><button class="btn secondary" data-action="mh-go" data-view="activities" data-page="volunteer">${MH2.volunteer.roles.length} أدوار تطوعية متاحة</button></p>`;
+}
+function myShifts(){return st('actShifts',[]);}
+function actVolunteer(){
+ const V=MH2.volunteer,ev=evById(V.event),mine=myShifts();
+ return `<p class="mh-lede">التطوع في <b>${e(ev.title)}</b> · ${arDate(ev.date,{weekday:'long',day:'numeric',month:'long'})} · المشرف: ${V.supervisor}</p><div class="mh-roles">${V.roles.map(role=>`<section class="mh-role"><h3>${role.name}</h3><p>${role.duty}</p><p class="mh-fine">الشروط: ${role.req}</p><ul class="mh-shifts">${role.shifts.map(sh=>{const taken=sh.taken+(mine.includes(sh.id)?1:0),full=taken>=sh.seats,me=mine.includes(sh.id);return `<li class="${me?'me':''}"><bdi dir="ltr">${sh.start}–${sh.end}</bdi><span>${bar(Math.round(taken/sh.seats*100))} ${taken}/${sh.seats}</span>${me?`<button class="btn small secondary" data-action="act-shift" data-id="${sh.id}">إلغاء</button>`:`<button class="btn small" data-action="act-shift" data-id="${sh.id}" ${full?'disabled':''}>${full?'مكتمل':'اختر'}</button>`}</li>`;}).join('')}</ul></section>`).join('')}</div>`;
+}
+function shiftById(id){for(const r of MH2.volunteer.roles){const sh=r.shifts.find(x=>x.id===id);if(sh)return {...sh,role:r.name};}}
+function actShifts(){const ev=evById(MH2.volunteer.event),mine=myShifts().map(shiftById);
+ return `<h2>شفتاتي</h2>${mine.length?`<ol class="mh-agenda">${mine.map(sh=>`<li class="layer-club"><time><bdi dir="ltr">${sh.start}</bdi></time><span><strong>${sh.role}</strong><small>${e(ev.title)} · ${arDate(ev.date)} · حتى ${sh.end}</small></span></li>`).join('')}</ol>`:`<p class="mh-empty">لم تختر شفتًا بعد. <button class="text-button" data-action="mh-go" data-view="activities" data-page="volunteer">استعرض فرص التطوع</button></p>`}<p class="mh-fine">تظهر شفتاتك في التقويم الموحد، وتصلك تنبيهات عند تغيير التكليف.</p>`;}
+function actMyRegs(){
+ const groups=[['offer','عروض تحتاج ردك'],['accepted','مقبول'],['submitted','قيد المراجعة'],['review','قيد المراجعة'],['waitlisted','قائمة الانتظار'],['declined','لم يُقبل'],['withdrawn','منسحب']],regs=actRegs();
+ return groups.map(([k,t])=>{const rs=regs.filter(r=>r.status===k&&!evById(r.event).past);return rs.length?`<section class="mh-reggroup"><h2>${t}</h2><ol class="mh-evlist">${rs.map(r=>evRow(evById(r.event))).join('')}</ol></section>`:'';}).join('')+`<section class="mh-reggroup"><h2>فعاليات سابقة</h2><ol class="mh-evlist">${regs.filter(r=>evById(r.event).past).map(r=>evRow(evById(r.event))).join('')}</ol></section>`;
+}
+function actContrib(){
+ const C=MH2.contributions,hours=C.filter(c=>c.verified&&c.hours).reduce((a,c)=>a+c.hours,0),pending=C.filter(c=>!c.verified&&c.hours).reduce((a,c)=>a+c.hours,0);
+ const cell=v=>v===true?`<span class="yes">${icon('check')}</span>`:v===false?'<span class="no">—</span>':'<span class="no">جارٍ</span>';
+ return `<p class="mh-lede">لديك <b>${hours} ساعة تطوعية معتمدة</b>${pending?` و${pending} ساعات بانتظار اعتماد الجهة المنظمة`:''}. المساهمات المعتمدة تنتقل إلى ملفك الشخصي.</p>
+ <table class="mh-contrib"><thead><tr><th>المساهمة</th><th>سجّل</th><th>حضر</th><th>ساهم فعليًا</th><th>الساعات</th><th>التحقق</th></tr></thead><tbody>${C.map(c=>`<tr><td><strong>${c.title}</strong><small>${c.role} · ${arDate(c.date)}</small>${c.cert?`<small>${icon('award')} ${c.cert}</small>`:''}</td><td>${cell(c.registered)}</td><td>${cell(c.attended)}</td><td>${cell(c.contributed)}</td><td>${c.hours??'—'}</td><td><span class="mh-vs ${c.verified?'verified':'pending'}">${c.verified?'معتمدة':c.ongoing?'مستمرة':'بانتظار الاعتماد'}</span></td></tr>`).join('')}</tbody></table>`;
+}
+function actOrganizer(){
+ const s=st('actOrg',{}),ev=evById('ev-diab'),A=MH2.applicants.map(a=>({...a,status:s[a.id]||a.status,checked:s[a.id+':in']??a.checked}));
+ const short=MH2.volunteer.roles.flatMap(r=>r.shifts.map(sh=>({r:r.name,sh,left:sh.seats-sh.taken-(myShifts().includes(sh.id)?1:0)}))).filter(x=>x.left>0);
+ return `<p class="mh-lede">معاينة دور المنظم لفعالية <b>${e(ev.title)}</b>. الطالب العادي لا يرى هذه الصفحة.</p><div class="mh-org-grid"><section><h2>طلبات التسجيل</h2><table><thead><tr><th>المتقدم</th><th>السنة</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>${A.map(a=>`<tr><td>${a.name}</td><td>${a.year}</td><td><span class="mh-pill">${MH2.regStatus[a.status]}</span></td><td>${a.status==='accepted'?`<label class="mh-toggle"><input type="checkbox" data-checkin="${a.id}" ${a.checked?'checked':''}> حضر</label>`:a.status==='waitlisted'?`<button class="btn small" data-action="act-org" data-id="${a.id}" data-to="offer">إرسال عرض مقعد</button>`:a.status==='submitted'?`<button class="btn small" data-action="act-org" data-id="${a.id}" data-to="accepted">قبول</button> <button class="btn small secondary" data-action="act-org" data-id="${a.id}" data-to="waitlisted">انتظار</button> <button class="btn small secondary" data-action="act-org" data-id="${a.id}" data-to="declined">رفض</button>`:'—'}</td></tr>`).join('')}</tbody></table><p class="mh-fine">تسجيل الحضور لمرة واحدة لكل مشارك، ويعتمده المخوّل فقط.</p></section>
+ <section><h2>نقص المتطوعين</h2><ul class="mh-plain">${short.map(x=>`<li><b>${x.r}</b> <bdi dir="ltr">${x.sh.start}–${x.sh.end}</bdi> — ينقص ${x.left}</li>`).join('')||'<li>كل الأدوار مكتملة.</li>'}</ul><h2 class="mh-gap">المهام المتأخرة في المشروع</h2><ul class="mh-plain">${projTasks().filter(t=>t.due<MH.today&&t.status!=='done').map(t=>`<li>${t.title} — ${t.owner}</li>`).join('')||'<li>لا شيء متأخر.</li>'}</ul></section></div>`;
+}
+const taskStatusAr={todo:'للتنفيذ',progress:'قيد التنفيذ',blocked:'متعثرة',review:'مراجعة',done:'منجزة'};
+function projTasks(){const ov=st('projTask',{}),subs=st('projSub',{});return MH2.project.tasks.map(t=>({...t,status:ov[t.id]||t.status,subtasks:(t.subtasks||[]).map(([n,d],i)=>[n,subs[t.id+':'+i]??d])}));}
+function actProject(tab){
+ const P=MH2.project,T=projTasks(),done=T.filter(t=>t.status==='done').length,ready=st('projReady',[]);
+ const tabs=[['dash','نظرة عامة'],['tasks','المهام'],['plan','المراحل والجاهزية'],['files','الإعلانات والملفات']];
+ const head=`${crumbs('activities',[['الأنشطة','home'],[P.name]])}<header class="mh-proj-head"><div><h2>${P.name}</h2><p>${P.goal}</p><p class="mh-fine">مساحة عمل خاصة بأعضاء المشروع · دورك: ${P.myRole}. التسجيل في الفعالية العامة لا يمنح الدخول هنا.</p></div></header><div class="mh-seg mh-inner" role="group">${tabs.map(([k,t])=>`<button class="${k===tab?'active':''}" data-action="proj-tab" data-tab="${k}">${t}</button>`).join('')}</div>`;
+ if(tab==='tasks'){const v=st('projView','kanban'),cols=Object.keys(taskStatusAr),list=v==='mine'?T.filter(t=>t.owner==='أنت'):T;
+  const views=[['kanban','لوحة'],['list','قائمة'],['timeline','المواعيد'],['mine','مهامي']];
+  const card=t=>`<li class="${t.priority==='عالية'?'hi':''}"><strong>${e(t.title)}</strong><small>${t.committee} · ${t.owner} · ${arDate(t.due)}</small>${t.blocker?`<small class="late">${icon('alert')} ${t.blocker}</small>`:''}${t.subtasks.length?`<ul class="mh-subtasks">${t.subtasks.map(([n,d],i)=>`<li><label><input type="checkbox" data-sub="${t.id}:${i}" ${d?'checked':''}> ${n}</label></li>`).join('')}</ul>`:''}<select data-task="${t.id}" aria-label="حالة المهمة">${cols.map(c=>`<option value="${c}" ${t.status===c?'selected':''}>${taskStatusAr[c]}</option>`).join('')}</select></li>`;
+  const body=v==='kanban'?`<div class="mh-kanban five">${cols.map(c=>`<section class="mh-col col-${c}"><h3>${taskStatusAr[c]} <span>${list.filter(t=>t.status===c).length}</span></h3><ol>${list.filter(t=>t.status===c).map(card).join('')}</ol></section>`).join('')}</div>`
+   :v==='timeline'?`<ol class="mh-timeline">${[...list].sort((a,b)=>a.due.localeCompare(b.due)).map(t=>`<li class="${t.due<MH.today&&t.status!=='done'?'late':''} st-${t.status}"><time>${arDate(t.due)}</time><span><strong>${e(t.title)}</strong><small>${taskStatusAr[t.status]} · ${t.owner}</small></span></li>`).join('')}</ol>`
+   :`<ol class="mh-tasklist">${list.map(card).join('')||'<li>لا مهام.</li>'}</ol>`;
+  return head+`<div class="mh-sec-title"><div class="mh-seg" role="group" aria-label="طريقة العرض">${views.map(([k,t])=>`<button class="${k===v?'active':''}" data-action="proj-view" data-v="${k}">${t}</button>`).join('')}</div></div>${body}`;}
+ if(tab==='plan')return head+`<div class="mh-home-grid"><section><h3>المراحل الرئيسية</h3><ol class="mh-timeline">${P.milestones.map(([n,d,s])=>`<li class="${s}"><time>${arDate(d)}</time><span><strong>${n}</strong><small>${{late:'متأخرة',now:'جارية',next:'قادمة',done:'مكتملة'}[s]}</small></span></li>`).join('')}</ol></section><section><h3>قائمة الجاهزية قبل الإطلاق</h3><ul class="mh-checklist">${P.readiness.map((x,i)=>`<li><label><input type="checkbox" data-ready="${i}" ${ready.includes(i)?'checked':''}> ${x}</label></li>`).join('')}</ul><p class="mh-fine">${ready.length} من ${P.readiness.length} جاهز.</p></section></div>`;
+ if(tab==='files')return head+`<div class="mh-home-grid"><section><h3>الإعلانات</h3><ul class="mh-news-list">${P.news.map(([d,to,t])=>`<li><time>${arDate(d)}</time><span>${t}<small>إلى: ${to}</small></span></li>`).join('')}</ul></section><section><h3>الملفات المشتركة</h3><ul class="mh-plain">${P.files.map(([n,c,d])=>`<li>${icon('file')} ${n} <small>${c} · ${arDate(d)}</small></li>`).join('')}</ul><p class="mh-fine">ملفات كل لجنة تظهر لأعضائها فقط.</p></section></div>`;
+ const blocked=T.filter(t=>t.status==='blocked');
+ return head+`<div class="mh-proj-dash"><section><h3>التقدم</h3><p class="mh-big">${done} من ${T.length} مهام منجزة ${bar(Math.round(done/T.length*100))}</p>${blocked.length?`<div class="mh-alert">${icon('alert')}<span><strong>عقبة:</strong> ${blocked.map(t=>`${t.title} — ${t.blocker}`).join('؛ ')}</span></div>`:''}<h3>القادم</h3><ul class="mh-plain">${P.milestones.filter(m=>m[2]!=='done').slice(0,3).map(([n,d])=>`<li><b>${arDate(d)}</b> ${n}</li>`).join('')}</ul></section>
+ <section><h3>الفريق</h3><p><b>مديرة المشروع:</b> ${P.director}<br><b>النواب:</b> ${P.deputies.join('، ')}</p><ul class="mh-plain">${P.committees.map(([c,l])=>`<li><b>${c}</b> — ${l}</li>`).join('')}</ul></section></div>`;
+}
+function registerDialog(ev){
+ openDialog(`${dialogHeader('التسجيل في '+e(ev.title),evRegState(ev)==='full'?'المقاعد مكتملة؛ ستنضم لقائمة الانتظار':ev.review?'يراجع المنظم الطلبات قبل القبول':'')}<form class="dialog-body" id="act-form"><div class="field"><label for="act-why">لماذا تريد المشاركة؟</label><textarea id="act-why" rows="3" required maxlength="300"></textarea></div><div class="field"><label for="act-pref">تفضيل الحضور</label><select id="act-pref"><option>كامل اليوم</option><option>الفترة الصباحية</option></select></div><label class="mh-toggle"><input type="checkbox" required> أوافق على شروط المشاركة والانسحاب</label><div class="dialog-footer"><button class="btn">إرسال التسجيل</button></div></form>`);
+ $('#act-form').addEventListener('submit',x=>{x.preventDefault();const full=evRegState(ev)==='full';st('actRegs',[]).push({id:'rg-u'+Date.now(),event:ev.id,status:full?'waitlisted':ev.review?'review':'accepted',date:MH.today,pos:3});MHS.save();closeDialog();renderMH();toast(full?'انضممت لقائمة الانتظار.':ev.review?'أُرسل طلبك للمراجعة.':'تم قبول تسجيلك.');});
+}
+mhViews['activities:after']=r=>{
+ const f=MHS.s.actFilter;const bind=(id,k,val=x=>x.value)=>{const el=$('#'+id);el?.addEventListener(el.type==='search'?'input':'change',()=>{f[k]=val(el);MHS.save();renderMH();if(el.type==='search'){const n=$('#'+id);n.focus();n.setSelectionRange(n.value.length,n.value.length);}});};
+ if(f){bind('act-q','q');bind('act-cat','cat');bind('act-when','when');bind('act-mode','mode');bind('act-sort','sort');bind('act-mine','mine',x=>x.checked);}
+ $$('[data-checkin]').forEach(cb=>cb.addEventListener('change',()=>{st('actOrg',{})[cb.dataset.checkin+':in']=cb.checked;MHS.save();toast(cb.checked?'سُجّل الحضور.':'أُلغي تسجيل الحضور.');}));
+ $$('[data-task]').forEach(sel=>sel.addEventListener('change',()=>{st('projTask',{})[sel.dataset.task]=sel.value;MHS.save();renderMH();}));
+ $$('[data-sub]').forEach(cb=>cb.addEventListener('change',()=>{st('projSub',{})[cb.dataset.sub]=cb.checked;MHS.save();}));
+ $$('[data-ready]').forEach(cb=>cb.addEventListener('change',()=>{const set=new Set(st('projReady',[]));cb.checked?set.add(+cb.dataset.ready):set.delete(+cb.dataset.ready);MHS.s.projReady=[...set];MHS.save();renderMH();}));
+};
+document.addEventListener('click',ev=>{
+ const b=ev.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;
+ if(a==='act-register')registerDialog(evById(b.dataset.id));
+ else if(a==='act-withdraw'){st('actRegOv',{})[b.dataset.id]='withdrawn';MHS.save();renderMH();toast('انسحبت من الفعالية؛ أُتيح مقعدك لقائمة الانتظار.');}
+ else if(a==='act-offer'){st('actRegOv',{})[b.dataset.id]=b.dataset.to;MHS.save();renderMH();toast(b.dataset.to==='accepted'?'قبلت المقعد.':'اعتذرت؛ انتقل العرض للطالب التالي.');}
+ else if(a==='act-shift'){const id=b.dataset.id,mine=st('actShifts',[]);if(mine.includes(id)){MHS.s.actShifts=mine.filter(x=>x!==id);}else{const sh=shiftById(id),clash=mine.map(shiftById).find(o=>mins(o.start)<mins(sh.end)&&mins(sh.start)<mins(o.end));if(clash){toast(`يتعارض مع شفت «${clash.role}» ${clash.start}–${clash.end}.`);return;}mine.push(id);}MHS.save();renderMH();toast(mine.includes(id)?'سُجّلت في الشفت، ويظهر في تقويمك.':'أُلغي الشفت.');}
+ else if(a==='act-org'){st('actOrg',{})[b.dataset.id]=b.dataset.to;MHS.save();renderMH();toast('تم التحديث وأُشعر المتقدم.');}
+ else if(a==='proj-tab'){mhRoute.activities={page:'project',tab:b.dataset.tab};renderMH();}
+ else if(a==='proj-view'){MHS.s.projView=b.dataset.v;MHS.save();renderMH();}
+});
