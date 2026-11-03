@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-03T07:00:00Z",
+  "title": "Design System: بوابة كلية الطب | UQU MedHub",
+  "extensions": {
+    "colorMeta": {
+      "clinical-teal": { "role": "primary", "displayName": "Clinical Teal", "canonical": "#0a6b66", "darkCounterpart": "dark-teal", "tonalRamp": ["oklch(22% 0.04 185)", "oklch(32% 0.06 185)", "oklch(42% 0.08 185)", "oklch(49% 0.09 185)", "oklch(60% 0.08 185)", "oklch(72% 0.06 185)", "oklch(85% 0.035 185)", "oklch(95% 0.012 185)"] },
+      "deep-teal": { "role": "primary", "displayName": "Deep Teal", "canonical": "#06403d", "darkCounterpart": "dark-teal-strong", "tonalRamp": ["oklch(15% 0.03 185)", "oklch(24% 0.045 185)", "oklch(34% 0.055 185)", "oklch(45% 0.06 185)", "oklch(57% 0.055 185)", "oklch(70% 0.04 185)", "oklch(83% 0.025 185)", "oklch(95% 0.01 185)"] },
+      "mint-wash": { "role": "primary", "displayName": "Mint Wash", "canonical": "#e3f1ee", "darkCounterpart": "dark-mint" },
+      "logo-gold": { "role": "secondary", "displayName": "Logo Gold", "canonical": "#b8893a", "darkCounterpart": "dark-gold", "tonalRamp": ["oklch(25% 0.04 75)", "oklch(35% 0.06 75)", "oklch(47% 0.08 75)", "oklch(56% 0.09 75)", "oklch(65% 0.1 75)", "oklch(76% 0.09 78)", "oklch(87% 0.05 80)", "oklch(96% 0.015 80)"] },
+      "hero-gold": { "role": "secondary", "displayName": "Hero Gold", "canonical": "#e6c47c" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#11292b", "darkCounterpart": "dark-ink", "tonalRamp": ["oklch(15% 0.02 200)", "oklch(26% 0.025 200)", "oklch(37% 0.02 200)", "oklch(48% 0.018 200)", "oklch(60% 0.014 200)", "oklch(72% 0.01 200)", "oklch(85% 0.007 200)", "oklch(95% 0.004 200)"] },
+      "muted-slate": { "role": "neutral", "displayName": "Muted Slate", "canonical": "#536667", "darkCounterpart": "dark-muted" },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "#dde6e5", "darkCounterpart": "dark-line" },
+      "clinical-ground": { "role": "neutral", "displayName": "Clinical Ground", "canonical": "#f3f6f6", "darkCounterpart": "dark-ground" },
+      "surface": { "role": "neutral", "displayName": "Surface", "canonical": "#ffffff", "darkCounterpart": "dark-surface" },
+      "surface-soft": { "role": "neutral", "displayName": "Surface Soft", "canonical": "#f7faf9", "darkCounterpart": "dark-surface-soft" },
+      "rail-ink": { "role": "neutral", "displayName": "Rail Ink", "canonical": "#d7ebe6" },
+      "rail-label": { "role": "neutral", "displayName": "Rail Label", "canonical": "#a9cdc5" },
+      "rail-active": { "role": "neutral", "displayName": "Rail Active", "canonical": "#224a4d" },
+      "role-student-blue": { "role": "tertiary", "displayName": "Student Blue", "canonical": "#2f64a8" },
+      "role-admin-gold": { "role": "tertiary", "displayName": "Admin Gold", "canonical": "#9a6d1f" },
+      "role-service-purple": { "role": "tertiary", "displayName": "Service Purple", "canonical": "#6b4fa0" },
+      "danger": { "role": "tertiary", "displayName": "Danger", "canonical": "#b2544c" },
+      "dark-ground": { "role": "neutral", "displayName": "Night Ground", "canonical": "#0d1918" },
+      "dark-surface": { "role": "neutral", "displayName": "Night Surface", "canonical": "#152523" },
+      "dark-surface-soft": { "role": "neutral", "displayName": "Night Surface Soft", "canonical": "#11201e" },
+      "dark-surface-raised": { "role": "neutral", "displayName": "Night Surface Raised", "canonical": "#1b2e2b" },
+      "dark-teal": { "role": "primary", "displayName": "Night Aqua", "canonical": "#7fd0bd" },
+      "dark-teal-strong": { "role": "primary", "displayName": "Night Aqua Strong", "canonical": "#a9e6d6" },
+      "dark-mint": { "role": "primary", "displayName": "Night Mint", "canonical": "#1f3a34" },
+      "dark-ink": { "role": "neutral", "displayName": "Night Ink", "canonical": "#e6f0ed" },
+      "dark-muted": { "role": "neutral", "displayName": "Night Muted", "canonical": "#a3b6b1" },
+      "dark-line": { "role": "neutral", "displayName": "Night Hairline", "canonical": "#2a3f3b" },
+      "dark-gold": { "role": "secondary", "displayName": "Night Gold", "canonical": "#d7b46e" },
+      "dark-rail": { "role": "neutral", "displayName": "Night Rail", "canonical": "#081412" },
+      "dark-hero": { "role": "primary", "displayName": "Night Hero", "canonical": "#0b2f2c" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Entry gate title only, Deep Teal, weight 900." },
+      "hero-headline": { "displayName": "Hero Headline", "purpose": "Overview hero, white on deep teal." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles (h1)." },
+      "title": { "displayName": "Title", "purpose": "Section and panel headings (h2), serif." },
+      "title-sm": { "displayName": "Title Small", "purpose": "Sub-headings (h3), serif." },
+      "body": { "displayName": "Body", "purpose": "Running text, Readex Pro 15/1.75." },
+      "body-strong": { "displayName": "Body Strong", "purpose": "Row titles in role rows and hub rows." },
+      "label": { "displayName": "Label", "purpose": "Meta lines, table cells and headers, badges, footer." },
+      "metric": { "displayName": "Metric", "purpose": "KPI values with tabular figures, LTR, right-aligned." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 2px rgb(17 41 43/.05), 0 2px 8px -4px rgb(17 41 43/.08)", "dark": "0 1px 2px #0006", "purpose": "Resting lift for panels, metrics, cards, role rows, the hub list container." },
+      { "name": "shadow-md", "value": "0 2px 4px rgb(17 41 43/.04), 0 14px 28px -14px rgb(17 41 43/.22)", "dark": "0 16px 32px -16px #000a", "purpose": "Hover lift on role rows and course tiles; the overview hero; toasts." },
+      { "name": "shadow-dialog", "value": "0 2px 6px rgb(17 41 43/.08), 0 32px 64px -24px rgb(17 41 43/.35)", "purpose": "Modal dialogs, over a rgb(6 30 28/.42) backdrop with 3px blur." },
+      { "name": "focus-ring", "value": "outline: 2px solid var(--gold); outline-offset: 3px", "purpose": "Global focus-visible ring on every interactive element." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(.16,1,.3,1)", "purpose": "CSS transitions on transform and shadow; dialog entrance." },
+      { "name": "gsap-entrance", "value": "expo.out, 0.8s, y 16-18px, stagger 0.035-0.06s", "purpose": "Route-change entrances only; never on in-page re-renders." },
+      { "name": "scroll-reveal", "value": "ScrollTrigger batch, start top 94%, once, y 22px, 0.8s expo.out", "purpose": "Below-the-fold containers on a newly entered route." },
+      { "name": "route-sweep", "value": "1.2s power2.inOut, gold dash along an ECG path under the top bar", "purpose": "Signals every route change." },
+      { "name": "count-up", "value": "1.1s power3.out", "purpose": "Integer and percent metrics count up on entry." },
+      { "name": "heartbeat", "value": "1.15s per beat", "purpose": "Pulse scene beat cycle (about 52 bpm)." },
+      { "name": "dialog-in", "value": "0.38s, from translateY(10px) scale(.985), opacity 0", "purpose": "Dialog open." },
+      { "name": "control-transition", "value": "background-color .2s, box-shadow .2s, transform .2s ease-out; press scale(.98)", "purpose": "Buttons and controls." },
+      { "name": "reduced-motion", "value": "GSAP skipped; CSS animation/transition durations .01ms", "purpose": "prefers-reduced-motion: reduce." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "900px", "purpose": "Gate and hub collapse to one column; tables become stacked rows; hero scene becomes an 84px ECG strip." },
+      { "name": "phone", "value": "480px", "purpose": "Role rows drop the arrow; gate footer stacks." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default action: Clinical Teal fill, deepens to Deep Teal on hover, presses to 0.98.",
+      "html": "<button class=\"ds-btn-primary\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>طلب جديد</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:10px 17px;border:0;border-radius:10px;background:var(--green,#0a6b66);color:#fff;font-family:'Readex Pro',Tahoma,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background-color .2s,box-shadow .2s,transform .2s cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:var(--green-dark,#06403d)}.ds-btn-primary:active{transform:scale(.98)}.ds-btn-primary:focus-visible{outline:2px solid var(--gold,#b8893a);outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Paired action: white surface, hairline border, ink text.",
+      "html": "<button class=\"ds-btn-secondary\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg>تصدير</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:10px 17px;border:1px solid var(--line,#dde6e5);border-radius:10px;background:var(--surface,#fff);color:var(--ink,#11292b);font-family:'Readex Pro',Tahoma,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background-color .2s,transform .2s cubic-bezier(.16,1,.3,1)}.ds-btn-secondary:hover{background:#f1f6f3}.ds-btn-secondary:active{transform:scale(.98)}.ds-btn-secondary:focus-visible{outline:2px solid var(--gold,#b8893a);outline-offset:3px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "White field with a hairline border and a leading muted icon; gold focus ring, teal caret.",
+      "html": "<label class=\"ds-search\" dir=\"rtl\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input placeholder=\"ابحث برقم الطلب أو عنوانه…\"></label>",
+      "css": ".ds-search{display:flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;background:var(--surface,#fff);border:1px solid var(--line,#dde6e5);border-radius:8px;color:#8c9b92;font-family:'Readex Pro',Tahoma,sans-serif}.ds-search input{flex:1;min-width:0;border:0;outline:none;background:transparent;font:inherit;font-size:13px;color:var(--ink,#11292b);caret-color:var(--green,#0a6b66)}.ds-search:focus-within{outline:2px solid var(--gold,#b8893a);outline-offset:3px}"
+    },
+    {
+      "name": "Rail Navigation",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Deep-teal rail with a serif portal name; items wash white on hover, active is Rail Active with white text.",
+      "html": "<nav class=\"ds-rail\" dir=\"rtl\"><div class=\"ds-rail-name\">بوابة كلية الطب<span>منظومة الخدمات والمبادرات</span></div><div class=\"ds-rail-label\">مساحة العمل</div><a class=\"ds-rail-item is-active\" href=\"#\">لوحة الإدارة</a><a class=\"ds-rail-item\" href=\"#\">التذاكر والطلبات<b>6</b></a><a class=\"ds-rail-item\" href=\"#\">مكتبة السلايدات</a></nav>",
+      "css": ".ds-rail{width:240px;padding:20px 14px;background:var(--rail,#06403d);color:#d2e6e1;font-family:'Readex Pro',Tahoma,sans-serif;border-radius:12px}.ds-rail-name{font-family:'Thmanyah Serif Display',Georgia,serif;font-weight:700;font-size:17px;color:#fff;text-align:center;margin-bottom:18px}.ds-rail-name span{display:block;font-family:'Readex Pro',Tahoma,sans-serif;font-weight:400;font-size:12px;color:#a9cdc5}.ds-rail-label{font-size:12.5px;color:#a9cdc5;margin:0 6px 6px}.ds-rail-item{display:flex;align-items:center;gap:12px;min-height:42px;padding:0 12px;margin:3px 0;border-radius:10px;color:#d2e6e1;text-decoration:none;font-size:14.5px;transition:background-color .2s,color .2s}.ds-rail-item b{margin-inline-start:auto;min-width:23px;text-align:center;border-radius:5px;font-size:12px;font-weight:600;background:#ffffff26;color:#fff}.ds-rail-item:hover{background:#ffffff12;color:#fff}.ds-rail-item.is-active{background:#224a4d;color:#fff;font-weight:600}.ds-rail-item:focus-visible{outline:2px solid var(--gold,#b8893a);outline-offset:3px}"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "status-chip",
+      "description": "Tinted 5px chip with a 4px leading dot. Ink values shown here are darkened to meet 4.5:1; the build's light inks do not.",
+      "html": "<span class=\"ds-status ds-new\">جديد</span> <span class=\"ds-status ds-progress\">قيد المعالجة</span> <span class=\"ds-status ds-done\">مكتمل</span>",
+      "css": ".ds-status{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:5px;font-family:'Readex Pro',Tahoma,sans-serif;font-size:12.5px;line-height:1.9;white-space:nowrap}.ds-status:before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor}.ds-new{background:#eef3fa;color:#3f5f84}.ds-progress{background:#fbf5e7;color:#7a6526}.ds-done{background:#eaf5ed;color:#356a4b}"
+    },
+    {
+      "name": "Live Count Pill",
+      "kind": "chip",
+      "refersTo": "live-count-pill",
+      "description": "Mint pill with a teal count, on hub rows.",
+      "html": "<span class=\"ds-live\">6 طلبات مفتوحة</span>",
+      "css": ".ds-live{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--mint,#e3f1ee);color:var(--green,#0a6b66);font-family:'Readex Pro',Tahoma,sans-serif;font-size:13px;font-weight:500;white-space:nowrap}"
+    },
+    {
+      "name": "Entry Role Row",
+      "kind": "custom",
+      "refersTo": "role-row",
+      "description": "Signature gate action: role-tinted icon tile, title, description, feature line, arrow; hover lifts and slides toward the reading direction.",
+      "html": "<button class=\"ds-role\" dir=\"rtl\"><span class=\"ds-role-icon\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"><path d=\"M3 5.5C5.5 4 9 4 12 6c3-2 6.5-2 9-.5V19c-2.5-1.5-6-1.5-9 .5-3-2-6.5-2-9-.5z\"/><path d=\"M12 6v13.5\"/></svg></span><span class=\"ds-role-body\"><strong>الطالب</strong><span>محاضراتك وخدماتك في مكان واحد؛ قدّم طلبك وتابع كل خطوة.</span><small>مكتبة المقررات · تقديم الطلبات · متابعة طلباتي</small></span><svg class=\"ds-role-arrow\" viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 12H5M11 6l-6 6 6 6\"/></svg></button>",
+      "css": ".ds-role{--role:#2f64a8;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;width:100%;max-width:580px;text-align:right;padding:16px 18px;background:var(--surface,#fff);border:1px solid var(--line,#dde6e5);border-radius:14px;box-shadow:0 1px 2px rgb(17 41 43/.05),0 2px 8px -4px rgb(17 41 43/.08);font-family:'Readex Pro',Tahoma,sans-serif;cursor:pointer;transition:border-color .25s,box-shadow .3s cubic-bezier(.16,1,.3,1),transform .3s cubic-bezier(.16,1,.3,1)}.ds-role-icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--role) 11%,#fff);color:var(--role);transition:background-color .25s,color .25s}.ds-role-body>*{display:block}.ds-role-body strong{font-size:17px;font-weight:600;color:#11292b;line-height:1.5}.ds-role-body span{font-size:14px;color:#536667;line-height:1.65;margin-top:2px}.ds-role-body small{font-size:12.5px;color:color-mix(in srgb,var(--role) 75%,#11292b);margin-top:6px}.ds-role-arrow{color:var(--role);transition:transform .3s cubic-bezier(.16,1,.3,1)}.ds-role:hover{border-color:color-mix(in srgb,var(--role) 45%,#dde6e5);box-shadow:0 2px 4px rgb(17 41 43/.04),0 14px 28px -14px rgb(17 41 43/.22);transform:translateX(-4px)}.ds-role:hover .ds-role-icon{background:var(--role);color:#fff}.ds-role:hover .ds-role-arrow{transform:translateX(-4px)}.ds-role:focus-visible{outline:2px solid #b8893a;outline-offset:3px}"
+    },
+    {
+      "name": "Hub Row List",
+      "kind": "card",
+      "refersTo": "icon-tile",
+      "description": "One container, hairline-divided rows: mint icon tile, title, one-line description, arrow.",
+      "html": "<div class=\"ds-hub\" dir=\"rtl\"><a class=\"ds-hub-row\" href=\"#\"><span class=\"ds-hub-icon\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"><path d=\"M5 4h14v6H5zM5 14h14v6H5z\"/></svg></span><span class=\"ds-hub-text\"><strong>التذاكر والطلبات</strong><span>تابع طلبات المستفيدين وحالاتها.</span></span><span class=\"ds-hub-arrow\">&larr;</span></a><a class=\"ds-hub-row\" href=\"#\"><span class=\"ds-hub-icon\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"><path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/></svg></span><span class=\"ds-hub-text\"><strong>التقارير والمؤشرات</strong><span>استعرض ملخص الأداء وصدّر التقارير.</span></span><span class=\"ds-hub-arrow\">&larr;</span></a></div>",
+      "css": ".ds-hub{max-width:560px;padding:0 24px;background:var(--surface,#fff);border:1px solid var(--line,#dde6e5);border-radius:16px;box-shadow:0 1px 2px rgb(17 41 43/.05),0 2px 8px -4px rgb(17 41 43/.08);overflow:hidden;font-family:'Readex Pro',Tahoma,sans-serif}.ds-hub-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:18px 2px;margin-bottom:-1px;border-bottom:1px solid var(--line,#dde6e5);color:#11292b;text-decoration:none}.ds-hub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--mint,#e3f1ee);color:var(--green,#0a6b66);transition:background-color .25s,color .25s}.ds-hub-text strong{display:block;font-size:16px;font-weight:600;transition:color .2s}.ds-hub-text span{display:block;font-size:14px;color:#536667;line-height:1.6;margin-top:2px}.ds-hub-arrow{color:#536667;transition:transform .3s cubic-bezier(.16,1,.3,1),color .2s}.ds-hub-row:hover .ds-hub-icon{background:var(--green,#0a6b66);color:#fff}.ds-hub-row:hover strong,.ds-hub-row:hover .ds-hub-arrow{color:var(--green,#0a6b66)}.ds-hub-row:hover .ds-hub-arrow{transform:translateX(-4px)}.ds-hub-row:focus-visible{outline:2px solid #b8893a;outline-offset:3px}"
+    },
+    {
+      "name": "Overview Hero",
+      "kind": "custom",
+      "refersTo": "hub-hero",
+      "description": "Flat deep-teal hero with serif headline and near-white primary; the pulse scene sits in the end column (canvas omitted here).",
+      "html": "<section class=\"ds-hero\" dir=\"rtl\"><h1>كل خدمات الكلية، في مكان واحد.</h1><p>خدمات الكلية ومبادراتها ومؤشراتها، في لوحة واحدة.</p><div class=\"ds-hero-actions\"><button class=\"ds-hero-primary\">أقسام البوابة</button><button class=\"ds-hero-ghost\">الخدمات والطلبات</button></div></section>",
+      "css": ".ds-hero{padding:40px 44px;border-radius:18px;background:var(--green-dark,#06403d);box-shadow:0 2px 4px rgb(17 41 43/.04),0 14px 28px -14px rgb(17 41 43/.22)}.ds-hero h1{margin:0 0 8px;font-family:'Thmanyah Serif Display',Georgia,serif;font-weight:700;font-size:clamp(28px,3vw,40px);line-height:1.3;color:#fff}.ds-hero p{margin:0;font-family:'Readex Pro',Tahoma,sans-serif;font-size:15.5px;line-height:1.85;color:#cfe4de;max-width:52ch}.ds-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.ds-hero-actions button{min-height:42px;padding:10px 17px;border-radius:10px;font-family:'Readex Pro',Tahoma,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background-color .2s,transform .2s cubic-bezier(.16,1,.3,1)}.ds-hero-primary{background:#f4faf8;color:#06403d;border:0}.ds-hero-primary:hover{background:#fff}.ds-hero-ghost{background:#ffffff14;color:#fff;border:1px solid #ffffff33}.ds-hero-ghost:hover{background:#ffffff22}.ds-hero-actions button:active{transform:scale(.98)}.ds-hero-actions button:focus-visible{outline:2px solid #e6c47c;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Calm Ward, One Pulse",
+    "overview": "A modern hospital information system with an academic soul. Work happens on a cool, almost-white clinical ground with white surfaces separated by hairlines and quiet, low shadows. One committed colour carries the brand: a deep teal that fills the navigation rail and the overview hero, so the product reads as a single institution rather than a template. Against that stillness there is exactly one living element, the heartbeat: a rotating 3D point-cloud heart with an ECG trace on the entry gate and in the overview hero, and a short gold pulse that sweeps under the top bar on every route change.\n\nDensity is operational, not marketing. Content is grouped in hairline-divided lists and tables inside a few large containers instead of grids of floating cards. Headings speak in Thmanyah Serif Display, an Arabic serif with editorial weight; everything you operate (nav, buttons, tables, forms) is set in Readex Pro. The layout is Arabic RTL first: the rail sits on the right, arrows point left, and hover nudges move toward the reading direction.\n\nLight and dark are two full themes of the same world, switched by `data-theme` on the root. Dark does not invert the teal rail into a light one; it deepens everything to near-black teal and lifts the accent to a pale aqua.",
+    "keyCharacteristics": [
+      "Cool clinical ground, white surfaces, hairline borders, soft diffuse shadows.",
+      "Deep-teal rail and hero as the one committed brand surface.",
+      "Gold is a signal (focus, selection, the pulse, the scene's hot points), never a fill.",
+      "Serif display for headings, Readex Pro for every operable element.",
+      "One living motif: the heartbeat, in canvas and in the route sweep.",
+      "RTL-native motion and iconography; full dark theme."
+    ],
+    "rules": [
+      { "name": "The Gold Is a Signal Rule", "body": "Gold marks attention: focus, selection, the pulse, the scene's hot points, and tiny status dots. It is never a button fill or a surface. The hero's primary button was moved from gold to near-white for this reason.", "section": "colors" },
+      { "name": "The One Committed Colour Rule", "body": "Deep teal is the only large saturated surface: the rail and the overview hero. Everything else stays on the clinical ground or white.", "section": "colors" },
+      { "name": "The Serif Speaks, the Sans Works Rule", "body": "Thmanyah Serif Display is for `h1`-`h3` and the portal name only. Buttons, nav, tables, forms, chips and row titles are always Readex Pro.", "section": "typography" },
+      { "name": "The Tabular Numbers Rule", "body": "Metrics, report stats, nav counts, ticket IDs, table cells and percentages use tabular figures.", "section": "typography" },
+      { "name": "The Lift on Intent Rule", "body": "Containers rest at the resting shadow and only reach the lifted shadow on hover or when they are the page's one hero.", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** keep Deep Teal as the only large saturated surface (rail and overview hero).",
+      "**Do** use gold only as a signal: focus ring, selection, the pulse sweep, scene hot points, small dots.",
+      "**Do** set every heading `h1`-`h3` in Thmanyah Serif Display and every control, table and row title in Readex Pro.",
+      "**Do** group related items as hairline-divided rows inside one container, with an icon tile, a title, a one-line description and a left-pointing arrow.",
+      "**Do** give every interactive control at least 42px height and the gold focus ring.",
+      "**Do** drive any new canvas or scene from `--scene-ink`, `--scene-hot` and `--scene-line` so it follows both themes.",
+      "**Do** run entrance motion only on route change, with `expo.out`, and skip it under reduced motion.",
+      "**Do** define every new colour for both themes."
+    ],
+    "donts": [
+      "**Don't** fill buttons or surfaces with gold.",
+      "**Don't** put a label or eyebrow line above headings; the build hides them on page headings and slide titles.",
+      "**Don't** add numbered icon-card grids or gradient-filled hero tiles; the hub is one flat deep-teal hero and a divided list.",
+      "**Don't** add a second living element; the heartbeat is the only ambient animation.",
+      "**Don't** use role hues outside the entry gate.",
+      "**Don't** replay entrance animations on in-page re-renders, filters or tab switches.",
+      "**Don't** use English marketing lines in the UI."
+    ]
+  }
+}
