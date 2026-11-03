@@ -172,3 +172,9 @@ html[data-theme="dark"] .hub-hero{background:#0b2f2c}
  .gate-visual{height:min(26vh,200px)}
  .hub-scene{display:block;aspect-ratio:auto;height:84px;margin:-8px 0 -12px}
 }
+/* AA contrast for status chips and table headers (light theme) */
+:root:not([data-theme="dark"]) .status.new{color:#2f5e8c}
+:root:not([data-theme="dark"]) .status.progress{color:#7a5f1c}
+:root:not([data-theme="dark"]) .status.waiting{color:#764a79}
+:root:not([data-theme="dark"]) .status.done{color:#2f6b47}
+:root:not([data-theme="dark"]) th{color:#5a6b68}
