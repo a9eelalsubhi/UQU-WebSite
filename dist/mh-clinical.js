@@ -3,7 +3,8 @@
 const MHC=MH.clinical;
 const levelAr={'Observed':'مشاهدة','Assisted':'مساعدة','Performed Under Supervision':'تنفيذ تحت الإشراف'};
 const logStatusAr={draft:'مسودة',pending:'بانتظار المشرف',approved:'معتمد',changes:'مطلوب تعديل',rejected:'مرفوض'};
-const clinicalTabs=[['home','لوحتي'],['rotation','الروتيشن'],['logbook','Logbook'],['skills','المهارات'],['osce','OSCE'],['tutor','الحالات الافتراضية'],['assess','التقييمات'],['passport','الجواز السريري']];
+const clinicalTabs=[['home','لوحتي'],['logbook','السجل والمتطلبات'],['osce','التدريب'],['passport','ملفي السريري']];
+const clinicalGroups={home:[['home','اليوم'],['rotation','تفاصيل الروتيشن']],logbook:[['logbook','السجل السريري'],['skills','المتطلبات والمهارات']],osce:[['osce','محطات OSCE'],['tutor','الحالات الافتراضية'],['station','']],passport:[['passport','الجواز السريري'],['assess','التقييمات']]};
 const mhTutor={case:null,asked:[],examined:[],tested:[],ddx:null,mode:'guided'};
 function reqStats(){const log=clinicalLog();return MHC.requirements.map(r=>{const mine=log.filter(x=>x.req===r.id);const ok=mine.filter(x=>x.status==='approved').length,wait=mine.filter(x=>x.status==='pending').length;return {...r,ok,wait,logged:mine.filter(x=>x.status!=='draft').length,left:Math.max(0,r.need-ok)};});}
 function reqMeter(r){const seg=n=>`${Math.min(n,r.need)/r.need*100}%`;return `<span class="mh-meter" aria-label="${r.ok} معتمد، ${r.wait} بانتظار المراجعة، من ${r.need}"><i class="ok" style="width:${seg(r.ok)}"></i><i class="wait" style="width:${seg(r.wait)}"></i></span>`;}
@@ -12,7 +13,7 @@ mhViews['clinical-years']=r=>{
  const page=r.page==='station'?'osce':r.page;
  const body={home:clinicalHome,rotation:()=>clinicalRotation(rotById(r.id)||rotById(MHC.profile.rotation)),logbook:clinicalLogbook,skills:clinicalSkills,osce:()=>r.page==='station'||r.id&&r.page==='osce'?osceStation(MHC.osce.find(o=>o.id===r.id)):osceLibrary(),tutor:clinicalTutor,assess:clinicalAssess,passport:clinicalPassport}[page]||clinicalHome;
  return `<div class="mh-clinical"><header class="mh-chart-head"><div><h1>السنوات السريرية</h1><p>معاينة بصفة طالب السنة الخامسة · بيانات توضيحية</p></div><button class="btn secondary" data-action="mh-go" data-view="clinical-years" data-page="logbook" data-id="new">${icon('plus')} نشاط جديد</button></header>
- <nav class="mh-subnav" aria-label="أقسام السنوات السريرية">${clinicalTabs.map(([k,t])=>`<button data-action="mh-go" data-view="clinical-years" data-page="${k}" ${k===page?'aria-current="page"':''}>${t}</button>`).join('')}</nav>${body()}</div>`;
+ ${sectionNav('clinical-years',clinicalTabs,{...clinicalGroups,osce:clinicalGroups.osce.filter(x=>x[1])},r.page==='station'?'osce':r.page)}${body()}</div>`;
 };
 function rotationTimeline(){
  const start=new Date('2026-08-30'),end=new Date('2027-03-11'),span=end-start,x=d=>((new Date(d)-start)/span*100).toFixed(2),now=x(MH.today);
@@ -23,8 +24,7 @@ function clinicalHome(){
  const due=MHC.assessments.filter(a=>a.status==='upcoming').slice(0,3);
  return `<section class="mh-chart"><dl class="mh-chart-grid"><div><dt>السنة</dt><dd>الخامسة</dd></div><div><dt>الروتيشن الحالي</dt><dd>${cur.name} <small lang="en">${cur.en}</small></dd></div><div><dt>موقع التدريب</dt><dd>${e(p.site)}</dd></div><div><dt>المجموعة</dt><dd>${p.group}</dd></div><div><dt>المشرف</dt><dd>${e(p.supervisor)}</dd></div><div><dt>الأسبوع</dt><dd>${cur.week} من ${cur.weeks}</dd></div></dl></section>
  ${rotationTimeline()}
- <div class="mh-ward-grid"><section><h2>جدول اليوم</h2><ol class="mh-agenda">${p.today.map(([t,what,where])=>`<li class="layer-official"><time>${t}</time><span><strong>${what}</strong><small>${where}</small></span></li>`).join('')}</ol></section>
- <section><h2>متطلبات ${cur.name}</h2><table class="mh-req"><tbody>${stats.map(r=>`<tr><th scope="row">${r.name}</th><td>${reqMeter(r)}</td><td><b>${r.ok}</b>/${r.need}</td></tr>`).join('')}</tbody></table><p class="mh-key"><i class="ok"></i>معتمد <i class="wait"></i>بانتظار المشرف <i></i>متبقٍ</p></section>
+ <div class="mh-ward-grid two"><section><h2>جدول اليوم</h2><ol class="mh-agenda">${p.today.map(([t,what,where])=>`<li class="layer-official"><time>${t}</time><span><strong>${what}</strong><small>${where}</small></span></li>`).join('')}</ol></section>
  <section><h2>يحتاج إجراء منك</h2><ul class="mh-action-list">${needs.map(x=>`<li class="${x.status}"><span>${logStatusAr[x.status]}</span><strong>${MHC.requirements.find(q=>q.id===x.req).name} · ${arDate(x.date)}</strong>${x.feedback?`<small>${e(x.feedback)}</small>`:''}<button class="text-button" data-action="mh-go" data-view="clinical-years" data-page="logbook">فتح ${icon('arrowLeft')}</button></li>`).join('')||'<li>لا شيء الآن.</li>'}</ul>
  <h2>التقييمات القادمة</h2><ul class="mh-plain">${due.map(a=>`<li><b>${arDate(a.date)}</b> <span lang="en">${a.type}</span> — ${a.title} <em class="kind ${a.kind==='رسمي'?'formal':''}">${a.kind}</em></li>`).join('')}</ul></section></div>
  <section class="mh-ward-news"><h2>إعلانات المنسق</h2>${MHC.announcements.map(a=>`<p><time>${arDate(a.date)}</time> ${e(a.text)} <small>— ${e(a.from)}</small></p>`).join('')}</section>`;

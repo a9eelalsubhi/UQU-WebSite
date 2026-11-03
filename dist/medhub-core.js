@@ -18,7 +18,7 @@ const MHS=(()=>{
  s={...base,...s};
  return {s,save(){try{localStorage.setItem(KEY,JSON.stringify(s));}catch{toast('تعذر الحفظ في هذا المتصفح.');}},reset(){Object.keys(s).forEach(k=>delete s[k]);Object.assign(s,JSON.parse(JSON.stringify(base)));this.save();}};
 })();
-const mhRoute={'basic-years':{page:'home'},'clinical-years':{page:'home'},'student-calendar':{page:'month'},'student-club':{page:'home'}};
+const mhRoute={'basic-years':{page:'home'},'clinical-years':{page:'home'},'student-calendar':{page:'week'},'student-club':{page:'home'}};
 const mhViews={};
 const allLectures=()=>MH.modules.flatMap(m=>m.lectures);
 const lectureById=id=>allLectures().find(l=>l.id===id);
@@ -31,8 +31,13 @@ function renderMH(sub=false){
  const fn=mhViews[view];if(!fn)return false;
  const r=mhRoute[view];main.innerHTML=fn(r)||'';hydrateIcons(main);
  mhViews[view+':after']?.(r);
- if(sub){window.scrollTo({top:0,behavior:'instant'});window.mhEnter?.();}
+ if(sub){window.scrollTo({top:0,behavior:'instant'});main.focus({preventScroll:true});window.mhEnter?.();}
  return true;
+}
+// Sections show a few tabs; related pages inside a tab sit behind a small segmented switch.
+function sectionNav(view,tabs,groups,page){
+ const g=Object.entries(groups).find(([,items])=>items.some(([p])=>p===page)),tab=g?g[0]:page;
+ return `<nav class="mh-subnav" aria-label="أقسام الصفحة">${tabs.map(([k,t])=>`<button data-action="mh-go" data-view="${view}" data-page="${k}" ${k===tab?'aria-current="page"':''}>${t}</button>`).join('')}</nav>${g&&g[1].length>1?`<div class="mh-seg mh-inner" role="group" aria-label="عرض">${g[1].map(([p,t])=>`<button class="${p===page?'active':''}" data-action="mh-go" data-view="${view}" data-page="${p}">${t}</button>`).join('')}</div>`:''}`;
 }
 function crumbs(view,items){return `<nav class="mh-crumbs" aria-label="مسار التنقل">${items.map(([label,page,id],i)=>i<items.length-1?`<button data-action="mh-go" data-view="${view}" data-page="${page}" ${id?`data-id="${id}"`:''}>${label}</button>${icon('chevronLeft')}`:`<span aria-current="page">${label}</span>`).join('')}</nav>`;}
 
@@ -46,33 +51,17 @@ mhViews.home=()=>{
  const m=moduleById('cns'),pr=moduleProgress(m),s=MHS.s;
  const last=lectureById(s.recent[0])||m.lectures.find(l=>!s.done.includes(l.id))||m.lectures[0];
  const today=MH.events.filter(ev=>ev.date===MH.today&&!ev.cancelled).concat(s.events.filter(ev=>ev.date===MH.today)).sort((a,b)=>a.start.localeCompare(b.start));
- const upcoming=MH.events.filter(ev=>['exam','deadline'].includes(ev.type)&&ev.date>=MH.today&&!ev.cancelled).slice(0,3);
- const weeks=Array.from({length:m.weeks},(_,i)=>i+1);
+ const upcoming=MH.events.filter(ev=>['exam','deadline'].includes(ev.type)&&ev.date>MH.today&&!ev.cancelled).slice(0,3);
  return `<div class="mh-home">
- <section class="mh-today">
-  <div class="mh-today-head"><p class="mh-date">${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} <span lang="en">${m.en}</span></p></div>
-  <ol class="mh-weeks" aria-label="أسابيع الموديول">${weeks.map(w=>`<li class="${w<m.week?'past':w===m.week?'now':''}"><span>الأسبوع ${w}</span>${w===m.week?'<b>الآن</b>':''}</li>`).join('')}</ol>
-  <canvas class="mh-today-pulse" data-pulse-scene="compact" aria-hidden="true"></canvas>
- </section>
+ <header class="mh-hello"><p>${arDate(MH.today,{weekday:'long',day:'numeric',month:'long'})}</p><h1>صباح الخير، عبدالله</h1><p>السنة الثالثة · ${e(m.name)} · الأسبوع ${m.week} من ${m.weeks}</p></header>
+ <section class="mh-continue" aria-labelledby="continue-h"><h2 id="continue-h" class="sr-only">أكمل من حيث توقفت</h2>
+  <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><span class="mh-continue-label">أكمل من حيث توقفت</span><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty}</span><span class="mh-continue-progress">${bar(pr.p,'إنجاز الموديول')} أنجزت ${pr.done} من ${pr.total} محاضرات</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button></section>
  <div class="mh-home-grid">
-  <section class="mh-continue" aria-labelledby="continue-h">
-   <h2 id="continue-h">أكمل من حيث توقفت</h2>
-   <button class="mh-continue-card" data-action="mh-lecture" data-id="${last.id}"><strong lang="en">${e(last.title)}</strong><span>${e(last.doctor)} · ${specialtyAr[last.specialty]||last.specialty} · الأسبوع ${last.week}</span><span class="mh-continue-progress">${bar(pr.p,'إنجاز الموديول')} أنجزت ${pr.done} من ${pr.total} محاضرات في هذا الموديول</span><span class="mh-continue-go">افتح المحاضرة ${icon('arrowLeft')}</span></button>
-   <p class="mh-fine">التقدم متابعة شخصية لمذاكرتك، وليس إثبات حضور رسمي.</p>
-  </section>
-  <section class="mh-schedule" aria-labelledby="sched-h">
-   <div class="mh-sec-title"><h2 id="sched-h">جدول اليوم</h2><button class="text-button" data-action="mh-go" data-view="student-calendar" data-page="day">اليوم كاملًا ${icon('arrowLeft')}</button></div>
-   <ol class="mh-agenda">${today.map(ev=>`<li class="layer-${ev.layer}"><time>${ev.start}</time><span><strong>${e(ev.title)}</strong><small>${MH.types[ev.type]||''} · ${e(ev.place||'')}</small></span></li>`).join('')||'<li class="empty">لا مواعيد اليوم.</li>'}</ol>
-   <h3>قادم</h3>
-   <ul class="mh-upcoming">${upcoming.map(ev=>`<li><time>${arDate(ev.date)}</time><span>${e(ev.title)}</span><em class="type-${ev.type}">${MH.types[ev.type]}</em></li>`).join('')}</ul>
-  </section>
-  <section class="mh-news" aria-labelledby="news-h"><h2 id="news-h">آخر التحديثات</h2><ul>${MH.announcements.map(a=>`<li><time>${arDate(a.date)}</time><p>${e(a.text)}<small>${e(a.from)}</small></p></li>`).join('')}</ul></section>
-  <nav class="mh-shortcuts" aria-label="اختصارات"><h2>اختصارات</h2>
-   <button data-action="mh-go" data-view="basic-years" data-page="module" data-id="cns">${icon('book')}<span>موديول ${e(m.name)}</span></button>
-   <button data-action="mh-go" data-view="basic-years" data-page="saved">${icon('bookmark')}<span>المحفوظات <small>${s.saved.length}</small></span></button>
-   <button data-action="mh-search">${icon('search')}<span>البحث الأكاديمي</span></button>
-   <button data-action="mh-go" data-view="student-club" data-page="mine">${icon('users')}<span>ناديي ومهامي</span></button>
-  </nav>
+  <section aria-labelledby="sched-h"><div class="mh-sec-title"><h2 id="sched-h">اليوم</h2><button class="text-button" data-action="mh-go" data-view="student-calendar" data-page="week">التقويم ${icon('arrowLeft')}</button></div>
+   <ol class="mh-agenda">${today.map(ev=>`<li class="layer-${ev.layer}"><time>${ev.start}</time><span><strong dir="auto">${e(ev.title)}</strong><small>${e(ev.place||'')}</small></span></li>`).join('')||'<li class="empty">لا مواعيد اليوم.</li>'}</ol></section>
+  <section aria-labelledby="next-h"><h2 id="next-h">قادم</h2>
+   <ul class="mh-upcoming">${upcoming.map(ev=>`<li><time>${arDate(ev.date)}</time><span>${e(ev.title)}</span></li>`).join('')}</ul>
+   <h2 class="mh-gap">آخر تحديث</h2><p class="mh-latest">${e(MH.announcements[0].text)} <small>${e(MH.announcements[0].from)}</small></p><button class="text-button" data-action="mh-notes">كل الإشعارات ${icon('arrowLeft')}</button></section>
  </div></div>`;
 };
 
@@ -121,6 +110,7 @@ document.addEventListener('click',ev=>{
  if(a==='mh-go'){if(b.dataset.note&&!s.seenNotes.includes(b.dataset.note)){s.seenNotes.push(b.dataset.note);MHS.save();}if(dialog.open)closeDialog();const v=b.dataset.view;mhRoute[v]={...mhRoute[v],page:b.dataset.page,id:b.dataset.id};if(view===v)renderMH(true);else go(v);}
  else if(a==='mh-lecture'){mhRoute['basic-years']={page:'lecture',id:b.dataset.id};view==='basic-years'?renderMH(true):go('basic-years');}
  else if(a==='mh-search')openSearch();
+ else if(a==='mh-notes')notifications();
  else if(a==='mh-review'){const fb=b.dataset.to==='changes'?prompt('ملاحظة للطالب:','أضف تفاصيل أوضح عن دورك في النشاط.'):null;if(b.dataset.to==='changes'&&fb===null)return;s.logStatus[b.dataset.id]=b.dataset.to;if(fb)s.logStatus[b.dataset.id+':fb']=fb;MHS.save();renderMH();toast(b.dataset.to==='approved'?'اعتُمد النشاط.':'أُعيد النشاط للطالب مع ملاحظتك.');}
 });
 // The bell opens the unified notification centre for students.

@@ -1,0 +1,104 @@
+/* Calm layer: fewer things on screen, one obvious next step, more air. Loaded last. */
+main{max-width:1080px;margin-inline:auto}
+.topbar .demo-badge{display:none}
+.topbar .theme-label{display:none}
+.topbar .theme-toggle{min-width:42px;padding:0;justify-content:center}
+
+/* Search reads as a field */
+.search-launch{flex:1;max-width:420px;min-width:0;display:flex!important;align-items:center;gap:10px;height:42px;padding:0 14px!important;border-radius:12px!important;background:var(--surface-soft)!important;border:1px solid var(--line)!important;color:var(--muted)!important;font-size:14px;margin-inline:auto;transition:border-color .2s,background-color .2s}
+.search-launch:hover{border-color:color-mix(in srgb,var(--green) 40%,var(--line))!important;background:var(--surface)!important}
+.search-launch span{flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-launch kbd{font:inherit;font-size:12px;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);direction:ltr}
+.topbar{gap:16px}
+
+/* Sidebar: primary list, then a quiet «أخرى» group */
+.nav-more{margin:22px 15px 6px!important}
+.sidebar .sidebar-bottom{padding-top:20px}
+.sidebar-guide{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 14px;border-radius:10px;background:none;color:#cfe3de;font-size:14px}
+.sidebar-guide:hover{background:#ffffff12;color:#fff}
+.sidebar-guide .icon{width:18px;height:18px}
+
+/* Phone tab bar */
+.tabbar{display:none}
+@media (max-width:760px){
+ .tabbar{display:flex;position:fixed;inset-inline:0;bottom:0;z-index:25;background:var(--surface);box-shadow:0 -1px 0 var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+ body.selecting-role .tabbar{display:none}
+ .tab-item{flex:1;display:grid;justify-items:center;gap:2px;min-height:54px;padding:6px 2px;border-radius:12px;background:none;color:var(--muted);font-size:12px;text-decoration:none}
+ .tab-item .icon{width:22px;height:22px}
+ .tab-item.active{color:var(--green);font-weight:600}
+ .tab-item.active .icon{stroke-width:2.1}
+ .workspace{padding-bottom:72px}
+ .search-launch span,.search-launch kbd{display:none}
+ .search-launch{flex:0 0 42px;padding:0!important;justify-content:center;margin:0}
+ .topbar .mobile-menu{display:none}
+}
+
+/* Section headers: title + one line, tabs, optional inner switch */
+.mh-head,.mh-cal-head,.mh-club-head,.mh-chart-head{margin-bottom:14px}
+.mh-chart-head{border-top:0;padding-top:0}
+.mh-subnav{margin-bottom:18px}
+.mh-inner{margin:-4px 0 22px}
+.mh-lede{color:var(--muted);max-width:62ch;margin:-4px 0 24px}
+
+/* Student home */
+.mh-hello{margin:4px 0 22px}
+.mh-hello p{color:var(--muted)}
+.mh-hello h1{font-size:clamp(28px,3vw,38px);margin:2px 0}
+.mh-continue-card{padding:24px 26px}
+.mh-continue-label{font-size:13px;font-weight:500;color:var(--green)}
+.mh-continue-card strong{font-size:26px}
+.mh-home-grid{grid-template-columns:1fr 1fr;gap:28px 44px;margin-top:34px}
+.mh-home-grid h2{font-size:18px;margin-bottom:10px}
+.mh-gap{margin-top:26px!important}
+.mh-latest{font-size:15px;line-height:1.8}.mh-latest small{display:block;color:var(--muted);font-size:13px}
+.mh-upcoming li{grid-template-columns:92px 1fr}
+
+/* Module: tools row and a closed «about» drawer */
+.mh-tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.mh-tool{display:flex;align-items:center;gap:12px;min-height:58px;padding:8px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-align:right;transition:border-color .2s}
+.mh-tool:not(:disabled):hover{border-color:var(--sec)}
+.mh-tool .icon{color:var(--sec)}
+.mh-tool b{display:block;font-weight:500;font-size:14px}.mh-tool small{color:var(--muted);font-size:12.5px}
+.mh-module-body{grid-template-columns:1fr;max-width:820px}
+.mh-module-head{border-bottom:0;margin-bottom:14px;padding-bottom:0}
+.mh-about{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.mh-about summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--sec);font-weight:500}
+.mh-about-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:10px 0 4px}
+.mh-about-body h3{font-size:15px;margin-bottom:8px}
+
+/* Calendar toolbar */
+.mh-cal-bar{margin-bottom:10px}
+.mh-cal-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.mh-layer-chips{display:flex;gap:6px;flex-wrap:wrap}
+.mh-layer-chips label{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;cursor:pointer;transition:background-color .2s,border-color .2s}
+.mh-layer-chips input{position:absolute;opacity:0}
+.mh-layer-chips i{width:10px;height:10px;border-radius:50%;border:2px solid var(--lc)}
+.mh-layer-chips label:has(input:checked){border-color:color-mix(in srgb,var(--lc) 45%,var(--line));background:color-mix(in srgb,var(--lc) 8%,var(--surface))}
+.mh-layer-chips input:checked+i{background:var(--lc)}
+.mh-layer-chips label:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:2px}
+.mh-cal-filter summary,.mh-cal-changes summary{cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:10px;color:var(--muted);font-size:14px}
+.mh-cal-filter summary:hover,.mh-cal-changes summary:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.mh-cal-filter summary b{color:var(--green);font-weight:500}
+.mh-cal-filter summary .icon,.mh-cal-changes summary .icon{width:16px;height:16px}
+.mh-cal-filter[open]{flex-basis:100%}
+.mh-cal-filter-body{display:grid;grid-template-columns:minmax(0,2fr) 1fr 1fr;gap:10px;padding:10px 0 4px}
+.mh-cal-changes{margin-bottom:12px}
+.mh-cal-changes summary{color:var(--layer-org)}
+.mh-cal-changes ul{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:2px}
+.mh-cal-changes button{background:none;text-align:right;min-height:38px;padding:0 12px;font-size:14px;color:var(--ink)}
+.mh-cal-changes button:hover{color:var(--green)}
+.mh-cal-layout,.mh-cal-side{display:contents}
+
+/* Staff hub hero: shorter, no scene */
+.hub-hero{grid-template-columns:1fr;min-height:0;padding:28px 32px}
+.hub-scene{display:none!important}
+
+/* Breathing room in lists */
+.mh-lec{padding:12px 0}
+.mh-week{margin-bottom:28px}
+
+@media (max-width:900px){
+ .mh-home-grid,.mh-about-body,.mh-cal-filter-body{grid-template-columns:1fr}
+}
+@media (max-width:760px){.toast{bottom:84px!important}}
+main:focus{outline:none}
