@@ -11,7 +11,7 @@
  sweep.innerHTML='<svg viewBox="0 0 600 20" preserveAspectRatio="none"><path pathLength="1" d="M0 14H250l6-4 6 4h18l5 3 7-15 7 17 5-5h20l9-4 9 4H600"/></svg>';
  $('.topbar')?.append(sweep);
  const sweepPath=sweep.querySelector('path');
- const REVEAL='.hub-card,.panel,.metric,.resource-card,.initiative-card,.service-card,.course-tile,.lecture-card,.permission-card,.report-stat,.chart-row';
+ const REVEAL='.mh-reveal-item,.mh-week,.mh-lec,.mh-units>li,.mh-log>li,.mh-apps>ol>li,.mh-col,.mh-cases>li,.mh-osce-lib li,.hub-card,.panel,.metric,.resource-card,.initiative-card,.service-card,.course-tile,.lecture-card,.permission-card,.report-stat,.chart-row';
 
  function playSweep(){
   if(!canAnimate())return;
@@ -43,6 +43,7 @@
    ScrollTrigger.batch(below,{start:'top 94%',once:true,onEnter:batch=>g.to(batch,{opacity:1,y:0,duration:.8,ease:EASE,stagger:.05,clearProps:'transform,opacity'})});
   }
  }
+ window.mhEnter=()=>{if(canAnimate()){playSweep();enterView();}PulseScene.sync();};
  let lastKey='';
  const baseRender=render;
  render=function(){
