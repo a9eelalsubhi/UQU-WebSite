@@ -158,3 +158,17 @@ dialog::backdrop{background:rgb(6 30 28/.42);backdrop-filter:blur(3px)}
 .sidebar .initiative-note .text-button{color:#e6c47c}
 .sidebar-user{background:transparent!important;border-top-color:#ffffff1f!important;color:#e3f0ec}
 dialog{box-shadow:0 2px 6px rgb(17 41 43/.08),0 32px 64px -24px rgb(17 41 43/.35)}
+/* review fixes: gold stays for focus and the pulse; dark hero is flat; counts read on the rail */
+html[data-theme="dark"] .hub-hero{background:#0b2f2c}
+.hub-hero .hub-gold{background:#f4faf8!important;color:#06403d!important}
+.hub-hero .hub-gold:hover{background:#fff!important}
+.sidebar .nav-count{background:#ffffff26!important;color:#fff!important;font-weight:600}
+.sidebar .nav-item.active{box-shadow:none!important}
+.hub-card-live{font-size:13px;font-weight:500;color:var(--green);background:var(--mint);padding:2px 10px;border-radius:999px;white-space:nowrap}
+.hub-card{grid-template-columns:auto minmax(0,1fr) auto auto}
+.hub-personal>summary:after{content:''!important;width:9px;height:9px;border:solid currentColor;border-width:0 0 1.6px 1.6px;transform:rotate(-45deg);transition:transform .3s var(--ease-out)}
+.hub-personal[open]>summary:after{transform:rotate(135deg)}
+@media (max-width:900px){
+ .gate-visual{height:min(26vh,200px)}
+ .hub-scene{display:block;aspect-ratio:auto;height:84px;margin:-8px 0 -12px}
+}
