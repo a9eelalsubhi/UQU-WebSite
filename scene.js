@@ -52,10 +52,10 @@ const PulseScene=(()=>{
    ctx.globalAlpha=traceOnly?0:.35;ctx.strokeStyle=hot;ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,ey,scale*1.05,scale*.16,0,0,Math.PI*2);ctx.stroke();
    {
     const base=h-traceH/2,amp=traceH*.42,speed=w/2.4;
-    const headX=(t*speed)%(w+40)-20;
-    if(fill){trace.length=0;for(let x=0;x<=headX;x+=2)trace.push({x,y:base-ecg(((t-(headX-x)/speed)%BEAT+BEAT)%BEAT/BEAT)*amp});}
+    const headX=fill?w*.94:(t*speed)%(w+40)-20;
+    if(fill){trace.length=0;for(let x=0,step=Math.max(2,w/380);x<=headX;x+=step)trace.push({x,y:base-ecg(((t-(headX-x)/speed)%BEAT+BEAT)%BEAT/BEAT)*amp});}
     else trace.push({x:headX,y:base-ecg(phase)*amp});
-    while(trace.length&&(trace.length>400||trace[0].x>headX))trace.shift();
+    while(trace.length&&(trace.length>(fill?1e4:400)||trace[0].x>headX))trace.shift();
     ctx.globalAlpha=.16;ctx.strokeStyle=line;ctx.beginPath();ctx.moveTo(0,base);ctx.lineTo(w,base);ctx.stroke();
     ctx.lineWidth=2;ctx.lineJoin='round';
     for(let i=1;i<trace.length;i++){
