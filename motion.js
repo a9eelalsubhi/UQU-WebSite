@@ -62,10 +62,10 @@
   if(!canAnimate())return;
   const q=s=>$$(s,$('#role-entry'));
   g.timeline({defaults:{ease:EASE,duration:1}})
-   .from(q('.gate-visual'),{opacity:0,scale:.94,duration:1.6,clearProps:'transform,opacity'},0)
-   .from(q('.gate-logo,.gate-copy h1,.gate-lede,.gate-prompt'),{y:20,opacity:0,stagger:.08,clearProps:'transform,opacity'},.1)
-   .from(q('.gate-role,.gate-staff'),{x:-24,opacity:0,stagger:.07,clearProps:'transform,opacity'},.45)
-   .from(q('.gate-top,.gate-foot'),{opacity:0,duration:.8,clearProps:'opacity'},.7);
+   .from(q('.gate2-logo,.gate2-copy>*'),{y:18,opacity:0,stagger:.08,clearProps:'transform,opacity'},0)
+   .from(q('.gate2-body h2,.gate2-hint'),{y:14,opacity:0,stagger:.06,clearProps:'transform,opacity'},.2)
+   .from(q('.gate2-role'),{y:20,opacity:0,stagger:.07,clearProps:'transform,opacity'},.32)
+   .from(q('.gate2-top,.gate2-foot'),{opacity:0,duration:.8,clearProps:'opacity'},.6);
  };
  // The page booted before this file loaded; catch up with whatever is on screen.
  role?render():showRoleEntry();
